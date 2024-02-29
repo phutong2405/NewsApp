@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -21,25 +22,9 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  // late ScrollController controller;
+  final ScrollController controller = ScrollController();
   // late ScrollController controllerHot;
   // bool fabIsVisible = true;
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   controller = ScrollController();
-  //   controllerHot = ScrollController();
-  //   controller.addListener(() {
-  //     setState(() {
-  //       fabIsVisible =
-  //           controller.position.userScrollDirection == ScrollDirection.forward;
-  //     });
-  //     controllerHot.addListener(() {
-  //       // Handle scroll events for controllerHot if needed
-  //     });
-  //   });
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -50,6 +35,7 @@ class _HomePageState extends State<HomePage> {
         builder: (context, state) {
           if (state is AppLoaddedState) {
             return CustomScrollView(
+              controller: controller,
               slivers: <Widget>[
                 ///AppBar
                 homepageAppBar(context, widget.appBloc),
@@ -58,7 +44,11 @@ class _HomePageState extends State<HomePage> {
                     widget.appBloc.add(const AppRefreshEvent());
                   },
                 ),
-                hottestListTile(context),
+                hottestListTile(
+                  context,
+                  widget.appBloc,
+                  widget.data,
+                ),
                 trendingListTile(context),
                 newsListTile(
                   context,
@@ -73,7 +63,10 @@ class _HomePageState extends State<HomePage> {
           }
         },
       ),
-      floatingActionButton: fabHomePage(context),
+      floatingActionButton: fabHomePage(
+        context,
+        controller,
+      ),
     );
   }
 }
@@ -90,11 +83,13 @@ Widget homepageAppBar(BuildContext context, AppBloc appBloc) {
     flexibleSpace: FlexibleSpaceBar(
       centerTitle: true,
       collapseMode: CollapseMode.none,
-      title: Text('NewNews',
-          style: GoogleFonts.aladin(
-            color: Theme.of(context).colorScheme.onBackground,
-          ),
-          textScaleFactor: 1.5),
+      title: Text(
+        'NewNews',
+        style: GoogleFonts.aladin(
+          color: Theme.of(context).colorScheme.onBackground,
+          fontSize: 28,
+        ),
+      ),
     ),
     actions: [
       Container(
@@ -111,7 +106,7 @@ Widget homepageAppBar(BuildContext context, AppBloc appBloc) {
                     CupertinoModalPopupRoute(
                       barrierDismissible: true,
                       semanticsDismissible: true,
-                      builder: (context) => const PreferencePage(),
+                      builder: (context) => PreferencePage(appBloc: appBloc),
                       // fullscreenDialog: true
                     ),
                   );
@@ -143,13 +138,15 @@ Widget homepageAppBar(BuildContext context, AppBloc appBloc) {
             IconButton(
                 splashColor: Colors.transparent,
                 highlightColor: Colors.transparent,
-                color: Colors.amber,
+                color: Colors.amber.withOpacity(0.7),
                 onPressed: () {
                   Navigator.push(
                     context,
                     CupertinoPageRoute(
-                      builder: (context) =>
-                          BookmarkPage(articles: appBloc.bookmarkList),
+                      builder: (context) => BookmarkPage(
+                        data: appBloc.bookmarkList,
+                        appBloc: appBloc,
+                      ),
                       // fullscreenDialog: true
                     ),
                   );
@@ -162,7 +159,11 @@ Widget homepageAppBar(BuildContext context, AppBloc appBloc) {
   );
 }
 
-Widget newsListTile(BuildContext context, AppBloc appBloc, List<Article> data) {
+Widget newsListTile(
+  BuildContext context,
+  AppBloc appBloc,
+  List<Article> data,
+) {
   return SliverList(
     delegate: SliverChildBuilderDelegate(
       (_, int index) {
@@ -179,7 +180,7 @@ Widget newsListTile(BuildContext context, AppBloc appBloc, List<Article> data) {
                   ),
                   alignment: Alignment.centerRight,
                   child: Text(
-                    "Today",
+                    tr("today"),
                     style: GoogleFonts.openSans(
                         fontSize: 22, fontWeight: FontWeight.bold),
                   ))
@@ -192,7 +193,7 @@ Widget newsListTile(BuildContext context, AppBloc appBloc, List<Article> data) {
                   ),
                   alignment: Alignment.centerRight,
                   child: Text(
-                    "Yesterday",
+                    tr("yesterday"),
                     style: GoogleFonts.openSans(
                         fontSize: 22, fontWeight: FontWeight.bold),
                   ))
@@ -201,7 +202,8 @@ Widget newsListTile(BuildContext context, AppBloc appBloc, List<Article> data) {
             InkWell(
               onTap: () {
                 Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => const DetailPage(),
+                  builder: (context) =>
+                      DetailPage(appBloc: appBloc, article: data[index]),
                 ));
               },
               child: newsListTileView(context, appBloc, data[index]),
@@ -215,33 +217,32 @@ Widget newsListTile(BuildContext context, AppBloc appBloc, List<Article> data) {
   );
 }
 
-Widget hottestListTile(BuildContext context) {
+Widget hottestListTile(
+    BuildContext context, AppBloc appBloc, List<Article> data) {
   return SliverToBoxAdapter(
     child: Container(
       alignment: Alignment.center,
       margin: const EdgeInsets.symmetric(vertical: 8),
       height: MediaQuery.of(context).size.width * 0.75,
-
       width: MediaQuery.of(context).size.width * 0.8,
-      // color: Colors.red,
       child: PageView.builder(
         controller: PageController(
           viewportFraction: 0.7,
           // viewportFraction: MediaQuery.of(context).size.width < 400 ? 0.7 : 0.8,
         ),
         scrollDirection: Axis.horizontal,
-        itemCount: 20,
+        itemCount: data.length,
         itemBuilder: (_, int index) {
           return InkWell(
             onTap: () {
-              // Navigator.of(context).push(MaterialPageRoute(
-              //   builder: (context) => DetailPage(),
-              // ));
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) =>
+                    DetailPage(appBloc: appBloc, article: data[index]),
+              ));
             },
-            child: hottestListTileView(context),
+            child: hottestListTileView(context, appBloc, data[index]),
           );
         },
-        // childCount: 20,
       ),
     ),
   );
@@ -264,7 +265,8 @@ Widget trendingListTile(BuildContext context) {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
-                    "Trending\n 🔥 News:\n",
+                    // "Trending\n 🔥 News:\n",
+                    tr("trending"),
                     style: GoogleFonts.roboto(
                       fontSize: 15,
                       fontWeight: FontWeight.bold,
@@ -360,6 +362,8 @@ Widget newsListTileView(
                 overflow: TextOverflow.ellipsis,
                 style: GoogleFonts.publicSans(
                     fontSize: 14, fontWeight: FontWeight.bold),
+                textScaleFactor:
+                    appBloc.localSettingDataService.getTextScaleFactor,
               ),
             ),
           ),
@@ -398,9 +402,9 @@ Widget newsListTileView(
                     },
                     icon: !article.isBookmarked
                         ? const Icon(CupertinoIcons.bookmark)
-                        : const Icon(
+                        : Icon(
                             CupertinoIcons.bookmark_fill,
-                            color: Colors.amber,
+                            color: Colors.amber.withOpacity(0.7),
                           ),
                   )
                 ],
@@ -413,11 +417,7 @@ Widget newsListTileView(
               constraints: const BoxConstraints(
                 maxHeight: 120,
                 maxWidth: 120,
-                // minHeight: 90,
-                // minWidth: 90,
               ),
-              // height: 120,
-              // width: 120,
               height: MediaQuery.of(context).size.width * 0.3,
               width: MediaQuery.of(context).size.width * 0.3,
               decoration: BoxDecoration(
@@ -448,7 +448,11 @@ Widget newsListTileView(
   );
 }
 
-Widget hottestListTileView(BuildContext context) {
+Widget hottestListTileView(
+  BuildContext context,
+  AppBloc appBloc,
+  Article article,
+) {
   return Container(
     alignment: Alignment.center,
     padding: const EdgeInsets.all(2),
@@ -470,9 +474,11 @@ Widget hottestListTileView(BuildContext context) {
               children: [
                 SizedBox(
                   child: Text(
-                    "The New York Time \n40 minutes ago",
+                    "The New York Time \n40 ${tr("minutes")}",
                     maxLines: 2,
                     style: GoogleFonts.lato(fontSize: 13),
+                    textScaleFactor:
+                        appBloc.localSettingDataService.getTextScaleFactor,
                   ),
                 ),
                 const Spacer(),
@@ -480,8 +486,17 @@ Widget hottestListTileView(BuildContext context) {
                     splashColor: Colors.transparent,
                     highlightColor: Colors.transparent,
                     iconSize: 19,
-                    onPressed: () {},
-                    icon: const Icon(CupertinoIcons.bookmark))
+                    onPressed: () {
+                      appBloc.add(
+                        BookmarkClicked(article: article),
+                      );
+                    },
+                    icon: !article.isBookmarked
+                        ? const Icon(CupertinoIcons.bookmark)
+                        : Icon(
+                            CupertinoIcons.bookmark_fill,
+                            color: Colors.amber.withOpacity(0.7),
+                          ))
               ],
             ),
           ),
@@ -520,6 +535,8 @@ Widget hottestListTileView(BuildContext context) {
                   overflow: TextOverflow.ellipsis,
                   style: GoogleFonts.publicSans(
                       fontSize: 15, fontWeight: FontWeight.w800),
+                  textScaleFactor:
+                      appBloc.localSettingDataService.getTextScaleFactor,
                 ),
               ),
               Text(
@@ -528,6 +545,8 @@ Widget hottestListTileView(BuildContext context) {
                 overflow: TextOverflow.ellipsis,
                 style: GoogleFonts.publicSans(
                     fontSize: 14, fontWeight: FontWeight.w600),
+                textScaleFactor:
+                    appBloc.localSettingDataService.getTextScaleFactor,
               ),
             ],
           ),

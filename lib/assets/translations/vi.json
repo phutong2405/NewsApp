@@ -1,0 +1,27 @@
+{
+    "trending":"Tin 🔥\n  Nóng:\n",
+    "today": "Hôm nay",
+    "yesterday": "Hôm qua",
+    "minutes": "phút trước",
+    "hours": "giờ trước",
+
+    "search": "Tìm kiếm theo sở thích của bạn",
+    "byCategories" : "theo Thể loại",
+    "byPages" : "theo Trang",
+    "done": "Xong",
+
+    "ai":"Tóm tắt theo AI",
+
+    "textsize": "Kích thước chữ",
+    "darkmode": "Chế độ tối",
+    "expanded": "Mở rộng bản tóm tắt ",
+    "autotrans": "Dịch tự động",
+    "languages": "Ngôn ngữ",
+
+    "large": "Lớn",
+    "medium": "Vừa",
+    "small": "Nhỏ",
+
+    "en": "English",
+"vi" : "Tiếng Việt"
+}

@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:glassmorphism_ui/glassmorphism_ui.dart';
@@ -23,16 +24,19 @@ class _FilterPageState extends State<FilterPage> {
           child: filterPageBackground(
             context,
             [
-              const Padding(
-                padding: EdgeInsets.only(right: 15.0),
-                child: CupertinoSearchTextField(),
+              Padding(
+                padding: const EdgeInsets.only(right: 15.0),
+                child: CupertinoSearchTextField(
+                  keyboardType: TextInputType.text,
+                  placeholder: tr("search"),
+                ),
               ),
               divineSpace(height: MediaQuery.of(context).size.width * 0.1),
-              gridTitle("by Categories"),
+              gridTitle(context, tr("byCategories")),
               divineSpace(height: 10),
               filterGrid(context, kNewsCategories),
               divineSpace(height: MediaQuery.of(context).size.width * 0.1),
-              gridTitle("by Pages"),
+              gridTitle(context, tr("byPages")),
               divineSpace(height: 10),
               filterGrid(context, kFamousNewspapers),
               divineSpace(height: 15),
@@ -46,7 +50,7 @@ class _FilterPageState extends State<FilterPage> {
 Widget filterPageBackground(BuildContext context, List<Widget> widgets) {
   return GlassContainer(
     blur: 15,
-    color: Colors.white.withOpacity(0.7),
+    color: Theme.of(context).colorScheme.background.withOpacity(0.7),
     child: Container(
       padding: EdgeInsets.only(
           top: MediaQuery.of(context).size.height > 800 ? 80 : 50,
@@ -84,6 +88,7 @@ Widget filterGrid(BuildContext context, Map data) {
             decoration: BoxDecoration(
               border: Border.all(
                 width: 0.1,
+                color: Theme.of(context).colorScheme.onBackground,
               ),
               borderRadius: BorderRadius.circular(
                 10,
@@ -109,10 +114,10 @@ Widget filterGrid(BuildContext context, Map data) {
                 divineSpace(height: 5),
                 Text(
                   data.entries.elementAt(index).key,
-                  maxLines: 3,
+                  maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                   style: GoogleFonts.openSans(
-                      color: Colors.black,
+                      color: Theme.of(context).colorScheme.onBackground,
                       fontSize: 13,
                       fontWeight: FontWeight.bold),
                 ),
@@ -126,57 +131,50 @@ Widget filterGrid(BuildContext context, Map data) {
   );
 }
 
-Widget gridTitle(String title) {
+Widget gridTitle(BuildContext context, String title) {
   return Text(
     title,
     style: GoogleFonts.openSans(
-        color: Colors.black, fontSize: 15, fontWeight: FontWeight.bold),
-  );
-}
-
-Widget doneFilterButton(BuildContext context) {
-  return Container(
-    alignment: Alignment.centerRight,
-    margin: const EdgeInsets.only(right: 15),
-    child: CupertinoButton(
-      color: Colors.green.shade50.withOpacity(0.4),
-      borderRadius: BorderRadius.circular(10),
-      padding: const EdgeInsets.all(12),
-      child: Text(
-        " Done ",
-        overflow: TextOverflow.ellipsis,
-        style: GoogleFonts.openSans(
-            color: Colors.green, fontSize: 15, fontWeight: FontWeight.bold),
-      ),
-      onPressed: () {
-        Navigator.pop(context);
-      },
-    ),
+        color: Theme.of(context).colorScheme.onBackground,
+        fontSize: 15,
+        fontWeight: FontWeight.bold),
   );
 }
 
 final Map<String, Icon> kNewsCategories = {
-  'Everything': const Icon(CupertinoIcons.checkmark_alt),
-  'News': const Icon(CupertinoIcons.doc_append),
+  'General': const Icon(CupertinoIcons.checkmark_alt),
   'Sports': const Icon(Icons.sports),
   'Business': const Icon(Icons.business),
   'Technology': const Icon(Icons.computer),
   'Entertainment': const Icon(Icons.movie),
   'Health': const Icon(Icons.healing),
-  'Fashion': const Icon(Icons.shopping_cart),
-  'Travel': const Icon(Icons.flight),
-  'Food': const Icon(Icons.restaurant),
-  'Real Estate': const Icon(Icons.home),
-  'Education': const Icon(Icons.school),
-  'Culture': const Icon(Icons.palette),
   'Science': const Icon(Icons.science),
-  'History': const Icon(Icons.history),
-  'Environment': const Icon(Icons.nature),
-  'Cars': const Icon(Icons.directions_car),
-  'Humanities': const Icon(Icons.people),
-  'Law': const Icon(Icons.gavel),
-  'Politics': const Icon(Icons.flag),
 };
+
+// final Map<String, Icon> kNewsCategories = {
+//   'Everything': const Icon(CupertinoIcons.checkmark_alt),
+//   'News': const Icon(CupertinoIcons.doc_append),
+//   'Sports': const Icon(Icons.sports),
+//   'Business': const Icon(Icons.business),
+//   'Technology': const Icon(Icons.computer),
+//   'Entertainment': const Icon(Icons.movie),
+//   'Health': const Icon(Icons.healing),
+//   'Fashion': const Icon(Icons.shopping_cart),
+//   'Travel': const Icon(Icons.flight),
+//   'Food': const Icon(Icons.restaurant),
+//   'Real Estate': const Icon(Icons.home),
+//   'Education': const Icon(Icons.school),
+//   'Culture': const Icon(Icons.palette),
+//   'Science': const Icon(Icons.science),
+//   'History': const Icon(Icons.history),
+//   'Environment': const Icon(Icons.nature),
+//   'Cars': const Icon(Icons.directions_car),
+//   'Humanities': const Icon(Icons.people),
+//   'Law': const Icon(Icons.gavel),
+//   'Politics': const Icon(Icons.flag),
+// };
+
+// businessentertainmentgeneralhealthsciencesportstechnology. Note: you can't mix this param with the sources
 
 final Map<String, Icon> kFamousNewspapers = {
   'The New York Times': const Icon(CupertinoIcons.doc_append),

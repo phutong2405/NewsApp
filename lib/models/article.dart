@@ -52,6 +52,18 @@ class Article {
       'contentInVietnamese': contentInVietnamese,
     };
   }
+
+  @override
+  int get hashCode => id.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Article && runtimeType == other.runtimeType && id == other.id;
+
+  setBookmark() {
+    isBookmarked = !isBookmarked;
+  }
 }
 
 List<Article> articleSpawn({required int amount}) {
@@ -74,5 +86,3 @@ List<Article> articleSpawn({required int amount}) {
   }
   return tmp;
 }
-
-List<Article> data30 = articleSpawn(amount: 30);

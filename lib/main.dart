@@ -1,12 +1,21 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:newsapplication/bloc/appbloc.dart';
 import 'package:newsapplication/bloc/appevent.dart';
 import 'package:newsapplication/views/appbloc_control.dart';
-import 'package:newsapplication/views/home/homepage.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await EasyLocalization.ensureInitialized();
+  runApp(EasyLocalization(
+      supportedLocales: const [
+        Locale('en'),
+        Locale('vi'),
+      ],
+      path: 'lib/assets/translations/',
+      fallbackLocale: const Locale('vi'),
+      child: const MyApp()));
 }
 
 class MyApp extends StatefulWidget {
@@ -18,30 +27,25 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   late final AppBloc appBloc;
-  // This widget is the root of your application.
+
   @override
   void initState() {
     super.initState();
+    initLocal();
+  }
+
+  void initLocal() async {
     appBloc = AppBloc();
     appBloc.add(const AppInitialEvent());
+    await appBloc.localSettingDataService.inital();
   }
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'News App',
-      debugShowCheckedModeBanner: false,
-      themeMode: ThemeMode.system, // Hỗ trợ dark mode theo hệ thống
-      darkTheme: ThemeData.dark(), // Giao diện dark mode
-      theme: ThemeData.light().copyWith(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueGrey),
-      ), // Giao diện light mode
-      home: BlocProvider(
-        create: (context) => AppBloc(),
-        child: BlocControl(
-          appBloc: appBloc,
-        ),
-        // child: HomePage(appBloc: appBloc),
+    return BlocProvider(
+      create: (context) => AppBloc(),
+      child: BlocControl(
+        appBloc: appBloc,
       ),
     );
   }

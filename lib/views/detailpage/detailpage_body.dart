@@ -1,11 +1,21 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:newsapplication/bloc/appbloc.dart';
+import 'package:newsapplication/models/article.dart';
 import 'package:newsapplication/views/widgets/generic_widgets.dart';
 
 // ignore: must_be_immutable
 class DetailPageBody extends StatefulWidget {
-  DetailPageBody({super.key, this.expandedHeight, required this.icon});
+  DetailPageBody(
+      {super.key,
+      this.expandedHeight,
+      required this.icon,
+      required this.appBloc,
+      required this.article});
+  final AppBloc appBloc;
+  final Article article;
   double? expandedHeight;
   Icon icon;
 
@@ -19,8 +29,9 @@ class _DetailPageBodyState extends State<DetailPageBody> {
     return SliverList(
       delegate: SliverChildListDelegate(
         [
-          detailpageHeader(context),
-          summaryView(context, widget.expandedHeight, widget.icon, () {
+          detailpageHeader(context, widget.appBloc, widget.article),
+          summaryView(
+              context, widget.appBloc, widget.expandedHeight, widget.icon, () {
             setState(() {
               widget.expandedHeight = widget.expandedHeight == 0 ? null : 0;
               widget.icon = widget.expandedHeight == 0
@@ -36,14 +47,22 @@ class _DetailPageBodyState extends State<DetailPageBody> {
                     );
             });
           }),
-          contentView(context),
+          contentView(
+            context,
+            widget.appBloc,
+            widget.article,
+          ),
         ],
       ),
     );
   }
 }
 
-Widget detailpageHeader(BuildContext context) {
+Widget detailpageHeader(
+  BuildContext context,
+  AppBloc appBloc,
+  Article article,
+) {
   return Column(
     children: [
       ///IMG
@@ -85,7 +104,7 @@ Widget detailpageHeader(BuildContext context) {
                 ),
                 const Spacer(),
                 Text(
-                  "40 minutes ago",
+                  "40 ${tr("minutes")}",
                   maxLines: 2,
                   style: GoogleFonts.lato(fontSize: 14),
                 ),
@@ -93,9 +112,11 @@ Widget detailpageHeader(BuildContext context) {
             ),
             divineSpace(height: 10),
             SelectableText(
-              "Qualcomm bán Snapdragon 8 Gen 3 giá 200 USD, có phải lý do S24 Ultra tăng giá?",
+              article.title,
               style: GoogleFonts.publicSans(
                   fontSize: 18, fontWeight: FontWeight.bold),
+              textScaleFactor:
+                  appBloc.localSettingDataService.getTextScaleFactor,
             ),
           ],
         ),
@@ -106,6 +127,7 @@ Widget detailpageHeader(BuildContext context) {
 
 Widget summaryView(
   BuildContext context,
+  AppBloc appBloc,
   double? expandedHeight,
   Icon icon,
   Function func,
@@ -135,7 +157,7 @@ Widget summaryView(
             children: [
               Center(
                 child: Text(
-                  "AI Summary ",
+                  tr("ai"),
                   style: GoogleFonts.publicSans(
                       color: Colors.blueGrey,
                       fontSize: 17,
@@ -167,7 +189,11 @@ Widget summaryView(
           - Câu chuyện của một số người dân về hành trình về quê ăn Tết.
           - Khuyến cáo của lực lượng chức năng về việc đảm bảo an toàn khi di chuyển.""",
                 style: GoogleFonts.publicSans(
-                    fontSize: 16, fontWeight: FontWeight.normal),
+                  fontSize: 17,
+                  fontWeight: FontWeight.normal,
+                ),
+                textScaleFactor:
+                    appBloc.localSettingDataService.getTextScaleFactor,
               ),
             ),
           ),
@@ -178,7 +204,11 @@ Widget summaryView(
   );
 }
 
-Widget contentView(BuildContext context) {
+Widget contentView(
+  BuildContext context,
+  AppBloc appBloc,
+  Article article,
+) {
   return Container(
     width: MediaQuery.of(context).size.width,
     // color: Colors.amber,
@@ -225,39 +255,43 @@ Bài viết còn đề cập đến:
 - Câu chuyện của một số người dân về hành trình về quê ăn Tết.
 - Khuyến cáo của lực lượng chức năng về việc đảm bảo an toàn khi di chuyển.""",
           style: GoogleFonts.publicSans(
-              fontSize: 16, fontWeight: FontWeight.normal),
+              fontSize: 17, fontWeight: FontWeight.normal),
+          textScaleFactor: appBloc.localSettingDataService.getTextScaleFactor,
         ),
-        Container(
-          height: 100,
-          margin: const EdgeInsets.only(bottom: 21),
-          child: Row(
-            children: [
-              IconButton(
-                  color: Theme.of(context).colorScheme.onBackground,
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  icon: const Icon(CupertinoIcons.back)),
-              IconButton(
-                  color: Theme.of(context).colorScheme.onBackground,
-                  onPressed: () {},
-                  icon: const Icon(CupertinoIcons.share)),
-              IconButton(
-                  color: Theme.of(context).colorScheme.onBackground,
-                  onPressed: () {},
-                  icon: const Icon(CupertinoIcons.globe)),
-              IconButton(
-                  color: Theme.of(context).colorScheme.onBackground,
-                  onPressed: () {},
-                  icon: const Icon(CupertinoIcons.bookmark)),
-            ],
-          ),
-        )
+        footerButtonDetailPage(context, appBloc, article)
       ],
     ),
   );
 }
 
+Widget footerButtonDetailPage(
+  BuildContext context,
+  AppBloc appBloc,
+  Article article,
+) {
+  return Container(
+    height: 100,
+    margin: const EdgeInsets.only(bottom: 21),
+    child: Row(
+      children: [
+        IconButton(
+            color: Theme.of(context).colorScheme.onBackground,
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: const Icon(CupertinoIcons.back)),
+        IconButton(
+            color: Theme.of(context).colorScheme.onBackground,
+            onPressed: () {},
+            icon: const Icon(CupertinoIcons.share)),
+        IconButton(
+            color: Theme.of(context).colorScheme.onBackground,
+            onPressed: () {},
+            icon: const Icon(CupertinoIcons.globe)),
+      ],
+    ),
+  );
+}
 
 
 // Widget htmlBody() {

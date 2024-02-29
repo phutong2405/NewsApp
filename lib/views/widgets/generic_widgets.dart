@@ -1,4 +1,7 @@
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 Widget divineSpace({double? height, double? width}) {
   return SizedBox(
@@ -70,6 +73,29 @@ TextButton genericTextButton(
       style: const TextStyle(
         color: Colors.white,
       ),
+    ),
+  );
+}
+
+Widget doneFilterButton(BuildContext context) {
+  return Container(
+    alignment: Alignment.centerRight,
+    margin: const EdgeInsets.only(right: 15),
+    child: CupertinoButton(
+      // color: Colors.green.shade50.withOpacity(0.4),
+      // borderRadius: BorderRadius.circular(10),
+      // padding: const EdgeInsets.all(12),
+      child: Text(
+        tr("done"),
+        overflow: TextOverflow.ellipsis,
+        style: GoogleFonts.openSans(
+            color: Theme.of(context).colorScheme.onBackground,
+            fontSize: 15,
+            fontWeight: FontWeight.bold),
+      ),
+      onPressed: () {
+        Navigator.pop(context);
+      },
     ),
   );
 }

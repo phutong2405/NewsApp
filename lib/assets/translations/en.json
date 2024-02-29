@@ -1,0 +1,27 @@
+{
+    "trending":"Trending\n 🔥 News:\n",
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "minutes": "minutes ago",
+    "hours": "hours ago",
+
+    "search": "Search for your interest",
+    "byCategories" : "by Categories",
+    "byPages" : "by Pages",
+    "done": "Done",
+
+    "ai":"AI Summary",
+
+    "textsize": "Text size",
+    "darkmode": "Dark mode",
+    "expanded": "Expanded summary",
+    "autotrans": "Auto-translate",
+    "languages": "Languages",
+
+    "large": "Large",
+    "medium": "Medium",
+    "small": "Small",
+
+    "en" : "English",
+    "vi": "Tiếng Việt"
+}

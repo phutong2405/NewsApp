@@ -1,10 +1,15 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:newsapplication/bloc/appbloc.dart';
+import 'package:newsapplication/views/preferencepage/cupertinopicker.dart';
+import 'package:newsapplication/views/preferencepage/cupertinoswitch.dart';
 import 'package:newsapplication/views/widgets/generic_widgets.dart';
 
 class PreferencePage extends StatefulWidget {
-  const PreferencePage({super.key});
+  final AppBloc appBloc;
+  const PreferencePage({super.key, required this.appBloc});
 
   @override
   State<PreferencePage> createState() => _PreferencePageState();
@@ -28,7 +33,11 @@ class _PreferencePageState extends State<PreferencePage> {
 
                 divineSpace(height: 30),
 
-                textSize(context),
+                textSize(
+                  context,
+                  widget.appBloc,
+                  SwitchType.textScaleFactor,
+                ),
                 divineSpace(height: 10),
                 listTileWswitch(
                   context,
@@ -36,8 +45,9 @@ class _PreferencePageState extends State<PreferencePage> {
                     Icons.dark_mode_outlined,
                     size: 20,
                   ),
-                  "darkmode",
-                  () {},
+                  tr("darkmode"),
+                  widget.appBloc,
+                  SwitchType.darkMode,
                 ),
                 divineSpace(height: 10),
                 listTileWswitch(
@@ -46,8 +56,9 @@ class _PreferencePageState extends State<PreferencePage> {
                     CupertinoIcons.chevron_down,
                     size: 20,
                   ),
-                  "expanded summary",
-                  () {},
+                  tr("expanded"),
+                  widget.appBloc,
+                  SwitchType.expandedSummary,
                 ),
                 // divineSpace(height: 10),
                 // warmPage(context),
@@ -59,13 +70,20 @@ class _PreferencePageState extends State<PreferencePage> {
                     Icons.translate_rounded,
                     size: 20,
                   ),
-                  "auto-translate",
-                  () {},
+                  tr("autotrans"),
+                  widget.appBloc,
+                  SwitchType.autoTranslate,
                 ),
                 divineSpace(height: 10),
-                translateTo(context),
-                divineSpace(height: 10),
-                languagesChoice(context),
+                // translateTo(
+                //   context,
+                //   widget.appBloc,
+                // ),
+                // divineSpace(height: 10),
+                languagesChoice(
+                  context,
+                  widget.appBloc,
+                ),
               ],
             ),
           ),
@@ -144,14 +162,14 @@ Widget listTileCustom({
         ),
         divineSpace(width: 10),
         SizedBox(
-          width: 200,
+          width: MediaQuery.of(context).size.width * 0.5,
           child: Text(
             title,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
             style: GoogleFonts.openSans(
               fontSize: 15,
-              fontWeight: FontWeight.w600,
+              fontWeight: FontWeight.w500,
             ),
           ),
         ),
@@ -226,23 +244,17 @@ Widget accountInformationLogin(BuildContext context) {
   );
 }
 
-Widget textSize(BuildContext context) {
-  return listTileCustom(
-    context: context,
-    leading: const Icon(
-      CupertinoIcons.book,
-      size: 20,
-    ),
-    title: "text size",
-    trailing: CupertinoButton(
-      padding: const EdgeInsets.all(5),
-      child: Text(
-        "Normal",
-        style: GoogleFonts.openSans(fontSize: 15),
-      ),
-      onPressed: () {},
-    ),
+Widget textSize(BuildContext context, AppBloc appBloc, SwitchType switchType) {
+  List<String> textSize = <String>[tr("small"), tr("medium"), tr("large")];
+  final textSizePicker = CupertinoPickerCustom(
+    appBloc: appBloc,
+    switchType: switchType,
+    selectionsName: textSize,
+    title: tr("textsize"),
+    iconData: CupertinoIcons.textformat_size,
   );
+
+  return textSizePicker;
 }
 
 Widget warmPage(BuildContext context) {
@@ -264,51 +276,40 @@ Widget warmPage(BuildContext context) {
   );
 }
 
-Widget listTileWswitch(
-    BuildContext context, Icon icon, String title, Function func) {
+Widget listTileWswitch(BuildContext context, Icon icon, String title,
+    AppBloc appBloc, SwitchType switchType) {
   return listTileCustom(
     context: context,
     leading: icon,
     title: title,
-    trailing: CupertinoSwitch(
-      // thumbColor: Colors.black,
-      // activeColor: Colors.blueGrey,
-      value: true,
-      onChanged: (value) {
-        func();
-      },
+    trailing: CupertinoSwitchCustom(
+      appBloc: appBloc,
+      switchType: switchType,
     ),
   );
 }
 
-Widget languagesChoice(BuildContext context) {
-  return listTileCustom(
-    context: context,
-    leading: const Icon(Icons.language),
-    title: "app's language",
-    trailing: CupertinoButton(
-      padding: const EdgeInsets.all(5),
-      child: Text(
-        "English",
-        style: GoogleFonts.openSans(fontSize: 15),
-      ),
-      onPressed: () {},
-    ),
+Widget languagesChoice(BuildContext context, AppBloc appBloc) {
+  List<String> languages = <String>[tr("en"), tr("vi")];
+  final languagePicker = CupertinoPickerCustom(
+    appBloc: appBloc,
+    switchType: SwitchType.languages,
+    selectionsName: languages,
+    title: tr("languages"),
+    iconData: Icons.language,
   );
+  return languagePicker;
 }
 
-Widget translateTo(BuildContext context) {
-  return listTileCustom(
-    context: context,
-    leading: const Icon(Icons.read_more),
-    title: "translate to",
-    trailing: CupertinoButton(
-      padding: const EdgeInsets.all(5),
-      child: Text(
-        "Vietnamese",
-        style: GoogleFonts.openSans(fontSize: 15),
-      ),
-      onPressed: () {},
-    ),
-  );
-}
+// Widget translateTo(BuildContext context, AppBloc appBloc) {
+//   const List<String> languagesToTranslate = <String>["English", "Tiếng Việt"];
+//   final translateToPicker = CupertinoPickerCustom(
+//     appBloc: appBloc,
+//     selectionsName: languagesToTranslate,
+//     switchType: SwitchType.translateTo,
+//     title: "Translate to",
+//     iconData: Icons.translate,
+//     initialName: ,
+//   );
+//   return translateToPicker;
+// }

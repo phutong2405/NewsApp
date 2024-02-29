@@ -26,3 +26,8 @@ class AppLoaddedState implements AppState {
 class AppRefreshingState implements AppState {
   const AppRefreshingState();
 }
+
+class BookmarkState implements AppState {
+  final List<Article> data;
+  const BookmarkState({required this.data});
+}

@@ -15,7 +15,7 @@ Widget fabToTop(BuildContext context) {
   );
 }
 
-Widget fabHomePage(BuildContext context) {
+Widget fabHomePage(BuildContext context, ScrollController controller) {
   return Row(
     mainAxisSize: MainAxisSize.min,
     children: [
@@ -59,7 +59,13 @@ Widget fabHomePage(BuildContext context) {
       ),
       divineSpace(width: 15),
       fabSFBlueprint(
-        func: () {},
+        func: () {
+          controller.animateTo(
+            0.0,
+            duration: const Duration(seconds: 1),
+            curve: Curves.easeInOut,
+          );
+        },
         content: Icon(
           CupertinoIcons.arrow_up_to_line,
           color: Theme.of(context).colorScheme.onBackground,
@@ -69,7 +75,10 @@ Widget fabHomePage(BuildContext context) {
   );
 }
 
-Widget fabDetailPage(BuildContext context) {
+Widget fabDetailPage(
+  BuildContext context,
+  ScrollController controller,
+) {
   return Row(
     mainAxisSize: MainAxisSize.min,
     children: [
@@ -89,7 +98,13 @@ Widget fabDetailPage(BuildContext context) {
       ),
       divineSpace(width: 10),
       fabSFBlueprint(
-        func: () {},
+        func: () {
+          controller.animateTo(
+            0.0,
+            duration: const Duration(seconds: 1),
+            curve: Curves.easeInOut,
+          );
+        },
         content: Icon(
           CupertinoIcons.arrow_up_to_line,
           color: Theme.of(context).colorScheme.onBackground,
