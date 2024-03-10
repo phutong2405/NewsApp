@@ -44,6 +44,14 @@ class _HomePageState extends State<HomePage> {
                     widget.appBloc.add(const AppRefreshEvent());
                   },
                 ),
+                SliverToBoxAdapter(
+                  child: RefreshIndicator(
+                    child: const SizedBox(),
+                    onRefresh: () async {
+                      await Future.delayed(const Duration(seconds: 2));
+                    },
+                  ),
+                ),
                 hottestListTile(
                   context,
                   widget.appBloc,
@@ -315,7 +323,7 @@ Widget trendingListTile(BuildContext context) {
                   ),
                 ),
                 child: Text(
-                  "Apple iphone 15",
+                  "Apple iphone ${index + 15}",
                   style: GoogleFonts.roboto(
                       fontSize: 14, fontWeight: FontWeight.bold),
                 ),
@@ -362,7 +370,7 @@ Widget newsListTileView(
               width: MediaQuery.of(context).size.width * 0.6,
               child: Text(
                 // "Qualcomm bán Snapdragon 8 Gen 3 giá 200 USD, Qualcomm bán Snapdragon 8 Gen 3 giá 200 USD, có phải lý do S24 Ultra tăng giá?",
-                article.content,
+                article.title,
                 maxLines: 4,
                 overflow: TextOverflow.ellipsis,
                 style: GoogleFonts.publicSans(
@@ -390,7 +398,8 @@ Widget newsListTileView(
                     // width: 190,
                     child: Text(
                       // "The New York Time \n40 minutes ago",
-                      "${article.author} \n${article.date}",
+                      // "${article.author} \n${article.publishedAt}",
+                      "${article.author} \n40 minutes ago",
                       maxLines: 2,
                       style: GoogleFonts.lato(fontSize: 13),
                     ),
@@ -435,13 +444,13 @@ Widget newsListTileView(
                       color: Colors.grey,
                     )
                   ],
-                  image: const DecorationImage(
+                  image: DecorationImage(
                     // image: AssetImage(
                     //   "lib/assets/images/filterbg.jpg",
                     // ),
                     image: NetworkImage(
-                      "https://photo2.tinhte.vn/data/attachment-files/2024/02/8263803_getty-uspto-patents.webp",
-                      // article.thumbnailURL,
+                      // "https://photo2.tinhte.vn/data/attachment-files/2024/02/8263803_getty-uspto-patents.webp",
+                      article.urlToImage,
                     ),
                     fit: BoxFit.cover,
                   )),
@@ -479,7 +488,8 @@ Widget hottestListTileView(
               children: [
                 SizedBox(
                   child: Text(
-                    "The New York Time \n40 ${tr("minutes")}",
+                    // "${article.author} \n${article.publishedAt}}",
+                    article.author,
                     maxLines: 2,
                     style: GoogleFonts.lato(fontSize: 13),
                     textScaleFactor:
@@ -506,54 +516,60 @@ Widget hottestListTileView(
             ),
           ),
         ),
-        Container(
-          padding: const EdgeInsets.all(8),
-          alignment: Alignment.centerLeft,
-          width: MediaQuery.of(context).size.width * 0.7,
-          height: MediaQuery.of(context).size.width * 0.6,
-          decoration: BoxDecoration(
-            image: const DecorationImage(
-              image: NetworkImage(
-                  "https://photo2.tinhte.vn/data/attachment-files/2024/02/8264348_Cover.jpg"),
-              fit: BoxFit.cover,
-              opacity: 0.25,
+        Material(
+          child: Container(
+            padding: const EdgeInsets.all(8),
+            alignment: Alignment.centerLeft,
+            width: MediaQuery.of(context).size.width * 0.7,
+            height: MediaQuery.of(context).size.width * 0.6,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: NetworkImage(
+                  // "https://photo2.tinhte.vn/data/attachment-files/2024/02/8264348_Cover.jpg",
+                  article.urlToImage,
+                ),
+                fit: BoxFit.cover,
+                opacity: 0.25,
+              ),
+              // color: Colors.grey.shade400.withOpacity(0.7),
+              color: const Color.fromARGB(
+                170,
+                234,
+                220,
+                198,
+              ),
+              borderRadius: BorderRadius.circular(5),
             ),
-            // color: Colors.grey.shade400.withOpacity(0.7),
-            color: const Color.fromARGB(
-              170,
-              234,
-              220,
-              198,
-            ),
-            borderRadius: BorderRadius.circular(5),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(
-                height: 80,
-                // width: 240,
-                child: Text(
-                  "Qualcomm bán Snapdragon 8 Gen 3 giá 200 USD, Qualcomm bán Snapdragon 8 Gen 3 giá 200 USD, có phải lý do S24 Ultra tăng giá?",
-                  maxLines: 4,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  height: 80,
+                  // width: 240,
+                  child: Text(
+                    // "Qualcomm bán Snapdragon 8 Gen 3 giá 200 USD, Qualcomm bán Snapdragon 8 Gen 3 giá 200 USD, có phải lý do S24 Ultra tăng giá?",
+                    article.title,
+                    maxLines: 4,
+                    overflow: TextOverflow.ellipsis,
+                    style: GoogleFonts.publicSans(
+                        fontSize: 15, fontWeight: FontWeight.w800),
+                    textScaleFactor:
+                        appBloc.localSettingDataService.getTextScaleFactor,
+                  ),
+                ),
+                Text(
+                  // "Xe máy len lỏi bên dòng ôtô nối dài trên đường Phan Trọng Tuệ hướng ra quốc lộ 1A cũ,Xe máy len lỏi bên dòng ôtô nối dài trên đường Phan Trọng Tuệ hướng ra quốc lộ 1A cũ, ùn tắc kéo dài đoạn câu Tó. Tuyến đường này có mặt đường hẹp, nhưng đón lượng lớn phương tiện tải trọng lớn lưu thông để tránh đi vào đường vành đai 3. ùn tắc kéo dài đoạn câu Tó. Tuyến đường này có mặt đường hẹp, nhưng đón lượng lớn phương tiện tải trọng lớn lưu thông để tránh đi vào đường vành đai 3.",
+                  article.content,
+                  maxLines: MediaQuery.of(context).size.width > 400 ? 9 : 7,
                   overflow: TextOverflow.ellipsis,
                   style: GoogleFonts.publicSans(
-                      fontSize: 15, fontWeight: FontWeight.w800),
+                      fontSize: 14, fontWeight: FontWeight.w600),
                   textScaleFactor:
                       appBloc.localSettingDataService.getTextScaleFactor,
                 ),
-              ),
-              Text(
-                "Xe máy len lỏi bên dòng ôtô nối dài trên đường Phan Trọng Tuệ hướng ra quốc lộ 1A cũ,Xe máy len lỏi bên dòng ôtô nối dài trên đường Phan Trọng Tuệ hướng ra quốc lộ 1A cũ, ùn tắc kéo dài đoạn câu Tó. Tuyến đường này có mặt đường hẹp, nhưng đón lượng lớn phương tiện tải trọng lớn lưu thông để tránh đi vào đường vành đai 3. ùn tắc kéo dài đoạn câu Tó. Tuyến đường này có mặt đường hẹp, nhưng đón lượng lớn phương tiện tải trọng lớn lưu thông để tránh đi vào đường vành đai 3.",
-                maxLines: MediaQuery.of(context).size.width > 400 ? 9 : 7,
-                overflow: TextOverflow.ellipsis,
-                style: GoogleFonts.publicSans(
-                    fontSize: 14, fontWeight: FontWeight.w600),
-                textScaleFactor:
-                    appBloc.localSettingDataService.getTextScaleFactor,
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ],

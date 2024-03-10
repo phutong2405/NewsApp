@@ -68,14 +68,15 @@ Widget detailpageHeader(
       ///IMG
       Container(
         height: 250,
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("lib/assets/images/filterbg.jpg"),
+            // image: AssetImage("lib/assets/images/filterbg.jpg"),
+            image: NetworkImage(article.urlToImage),
             fit: BoxFit.cover,
             opacity: 1,
             alignment: Alignment.center,
           ),
-          borderRadius: BorderRadius.only(
+          borderRadius: const BorderRadius.only(
             bottomLeft: Radius.circular(10),
             bottomRight: Radius.circular(10),
             topLeft: Radius.circular(10),
@@ -98,7 +99,8 @@ Widget detailpageHeader(
             Row(
               children: [
                 Text(
-                  "The New York Time",
+                  // "The New York Time",
+                  article.author,
                   maxLines: 2,
                   style: GoogleFonts.lato(fontSize: 14),
                 ),
@@ -223,37 +225,38 @@ Widget contentView(
         // htmlBody(),
 
         SelectableText(
-          """Tóm tắt bài viết Người dân lỉnh kỉnh hành lý rời Hà Nội về quê ăn Tết:
-\- Hàng nghìn người chen chúc, lỉnh kỉnh hành lý rời Hà Nội về quê ăn Tết.
-- Bến xe Mỹ Đình chật kín người, nhiều tuyến xe hết vé.
-- Nhiều người phải chờ đợi hàng giờ để mua vé và lên xe.
-- Giao thông tại bến xe Mỹ Đình ùn tắc nghiêm trọng.
-- Cần có giải pháp để giảm tải áp lực cho các bến xe trong dịp Tết.
+//           """Tóm tắt bài viết Người dân lỉnh kỉnh hành lý rời Hà Nội về quê ăn Tết:
+// \- Hàng nghìn người chen chúc, lỉnh kỉnh hành lý rời Hà Nội về quê ăn Tết.
+// - Bến xe Mỹ Đình chật kín người, nhiều tuyến xe hết vé.
+// - Nhiều người phải chờ đợi hàng giờ để mua vé và lên xe.
+// - Giao thông tại bến xe Mỹ Đình ùn tắc nghiêm trọng.
+// - Cần có giải pháp để giảm tải áp lực cho các bến xe trong dịp Tết.
 
-Bài viết còn đề cập đến:
+// Bài viết còn đề cập đến:
 
-- Câu chuyện của một số người dân về hành trình về quê ăn Tết.
-- Khuyến cáo của lực lượng chức năng về việc đảm bảo an toàn khi di chuyển. Tóm tắt bài viết Người dân lỉnh kỉnh hành lý rời Hà Nội về quê ăn Tết:
-\- Hàng nghìn người chen chúc, lỉnh kỉnh hành lý rời Hà Nội về quê ăn Tết.
-- Bến xe Mỹ Đình chật kín người, nhiều tuyến xe hết vé.
-- Nhiều người phải chờ đợi hàng giờ để mua vé và lên xe.
-- Giao thông tại bến xe Mỹ Đình ùn tắc nghiêm trọng.
-- Cần có giải pháp để giảm tải áp lực cho các bến xe trong dịp Tết.
+// - Câu chuyện của một số người dân về hành trình về quê ăn Tết.
+// - Khuyến cáo của lực lượng chức năng về việc đảm bảo an toàn khi di chuyển. Tóm tắt bài viết Người dân lỉnh kỉnh hành lý rời Hà Nội về quê ăn Tết:
+// \- Hàng nghìn người chen chúc, lỉnh kỉnh hành lý rời Hà Nội về quê ăn Tết.
+// - Bến xe Mỹ Đình chật kín người, nhiều tuyến xe hết vé.
+// - Nhiều người phải chờ đợi hàng giờ để mua vé và lên xe.
+// - Giao thông tại bến xe Mỹ Đình ùn tắc nghiêm trọng.
+// - Cần có giải pháp để giảm tải áp lực cho các bến xe trong dịp Tết.
 
-Bài viết còn đề cập đến:
+// Bài viết còn đề cập đến:
 
-- Câu chuyện của một số người dân về hành trình về quê ăn Tết.
-- Khuyến cáo của lực lượng chức năng về việc đảm bảo an toàn khi di chuyển. Tóm tắt bài viết Người dân lỉnh kỉnh hành lý rời Hà Nội về quê ăn Tết:
-\- Hàng nghìn người chen chúc, lỉnh kỉnh hành lý rời Hà Nội về quê ăn Tết.
-- Bến xe Mỹ Đình chật kín người, nhiều tuyến xe hết vé.
-- Nhiều người phải chờ đợi hàng giờ để mua vé và lên xe.
-- Giao thông tại bến xe Mỹ Đình ùn tắc nghiêm trọng.
-- Cần có giải pháp để giảm tải áp lực cho các bến xe trong dịp Tết.
+// - Câu chuyện của một số người dân về hành trình về quê ăn Tết.
+// - Khuyến cáo của lực lượng chức năng về việc đảm bảo an toàn khi di chuyển. Tóm tắt bài viết Người dân lỉnh kỉnh hành lý rời Hà Nội về quê ăn Tết:
+// \- Hàng nghìn người chen chúc, lỉnh kỉnh hành lý rời Hà Nội về quê ăn Tết.
+// - Bến xe Mỹ Đình chật kín người, nhiều tuyến xe hết vé.
+// - Nhiều người phải chờ đợi hàng giờ để mua vé và lên xe.
+// - Giao thông tại bến xe Mỹ Đình ùn tắc nghiêm trọng.
+// - Cần có giải pháp để giảm tải áp lực cho các bến xe trong dịp Tết.
 
-Bài viết còn đề cập đến:
+// Bài viết còn đề cập đến:
 
-- Câu chuyện của một số người dân về hành trình về quê ăn Tết.
-- Khuyến cáo của lực lượng chức năng về việc đảm bảo an toàn khi di chuyển.""",
+// - Câu chuyện của một số người dân về hành trình về quê ăn Tết.
+// - Khuyến cáo của lực lượng chức năng về việc đảm bảo an toàn khi di chuyển.""",
+          article.content,
           style: GoogleFonts.publicSans(
               fontSize: 17, fontWeight: FontWeight.normal),
           textScaleFactor: appBloc.localSettingDataService.getTextScaleFactor,

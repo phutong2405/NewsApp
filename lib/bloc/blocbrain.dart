@@ -6,7 +6,7 @@ import 'package:newsapplication/models/article.dart';
 import 'package:newsapplication/services/authentication/auth.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-List<Article> data30 = articleSpawn(amount: 30);
+// List<Article> data30 = articleSpawn(amount: 30);
 
 ///BOOKMARK HANDLER
 extension SetBookmark on List<Article> {

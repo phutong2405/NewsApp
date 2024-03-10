@@ -36,7 +36,7 @@ Widget fabHomePage(BuildContext context, ScrollController controller) {
             Container(
               constraints: const BoxConstraints(maxWidth: 180, maxHeight: 50),
               child: Text(
-                "tinhte",
+                "BBC",
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
                 style: GoogleFonts.openSans(

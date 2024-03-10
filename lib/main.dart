@@ -5,10 +5,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:newsapplication/bloc/appbloc.dart';
 import 'package:newsapplication/bloc/appevent.dart';
-import 'package:newsapplication/data/localdata.dart';
 import 'package:newsapplication/firebase_options.dart';
 import 'package:newsapplication/views/appbloc_control.dart';
-import 'package:newsapplication/views/sideview/overlays/loading_dialog.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

@@ -109,14 +109,16 @@ Widget filterGrid(BuildContext context, Map data) {
                   children: [
                     data.entries.elementAt(index).value,
                     const Spacer(),
-                    const Align(
-                      alignment: Alignment.centerRight,
-                      child: Icon(
-                        CupertinoIcons.check_mark_circled_solid,
-                        color: Colors.green,
-                        size: 22,
-                      ),
-                    ),
+                    index == 0
+                        ? const Align(
+                            alignment: Alignment.centerRight,
+                            child: Icon(
+                              CupertinoIcons.check_mark_circled_solid,
+                              color: Colors.green,
+                              size: 22,
+                            ),
+                          )
+                        : const SizedBox(),
                   ],
                 ),
                 divineSpace(height: 5),
@@ -185,6 +187,7 @@ final Map<String, Icon> kNewsCategories = {
 // businessentertainmentgeneralhealthsciencesportstechnology. Note: you can't mix this param with the sources
 
 final Map<String, Icon> kFamousNewspapers = {
+  'BBC': const Icon(CupertinoIcons.doc_append),
   'The New York Times': const Icon(CupertinoIcons.doc_append),
   'The Washington Post': const Icon(CupertinoIcons.doc_append),
   'The Wall Street Journal': const Icon(CupertinoIcons.doc_append),

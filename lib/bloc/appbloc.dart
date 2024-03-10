@@ -7,6 +7,7 @@ import 'package:newsapplication/bloc/appstate.dart';
 import 'package:newsapplication/bloc/blocbrain.dart';
 import 'package:newsapplication/data/localdata.dart';
 import 'package:newsapplication/models/article.dart';
+import 'package:newsapplication/services/fetchdata/news_fetch.dart';
 import 'package:newsapplication/views/preferencepage/cupertinoswitch.dart';
 
 class AppBloc extends Bloc<AppEvent, AppState> {
@@ -40,7 +41,8 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       AppInitialEvent event, Emitter<AppState> emit) async {
     await localSettingDataService.inital();
     emit(const AppLoaddingState());
-    data = data30;
+    data = await FetchingService().fetchData();
+    // data = data30;
     await Future.delayed(
       const Duration(milliseconds: 500),
       () => emit(AppLoaddedState(data: data)),
@@ -50,10 +52,23 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   FutureOr<void> appRefreshEvent(
       AppRefreshEvent event, Emitter<AppState> emit) async {
     emit(const AppRefreshingState());
-
+    data = await FetchingService().fetchData();
+    print(data);
+    for (var element in data) {
+      print("-------------");
+      print(element.author);
+      print(element.title);
+      print(element.content);
+      print(element.description);
+      print(element.publishedAt);
+      print(element.source);
+      print(element.url);
+      print(element.urlToImage);
+      print("-------------");
+    }
     await Future.delayed(
       const Duration(milliseconds: 500),
-      () => emit(AppLoaddedState(data: data30)),
+      () => emit(AppLoaddedState(data: data)),
     );
   }
 

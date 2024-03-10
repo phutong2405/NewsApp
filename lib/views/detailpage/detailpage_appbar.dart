@@ -46,7 +46,7 @@ class _DetailPageAppBarState extends State<DetailPageAppBar> {
             color: Theme.of(context).colorScheme.onBackground,
             onPressed: () {
               widget.appBloc
-                  .add(WebCliked(context: context, url: "https://tinhte.vn"));
+                  .add(WebCliked(context: context, url: widget.article.url));
             },
             icon: const Icon(CupertinoIcons.globe)),
         IconButton(

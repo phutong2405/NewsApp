@@ -50,7 +50,6 @@ class _CupertinoPickerCustomState extends State<CupertinoPickerCustom> {
 
   ///Bloc EVENT TRIGGER
   void eventTrigger(int selectedItem) {
-    _selectedName = selectedItem;
     switch (widget.switchType) {
       case SwitchType.languages:
         widget.appBloc.add(
@@ -80,6 +79,7 @@ class _CupertinoPickerCustomState extends State<CupertinoPickerCustom> {
 
   void _showDialog(Widget child) {
     showCupertinoModalPopup<void>(
+      barrierDismissible: false,
       context: context,
       builder: (BuildContext context) => Container(
         height: 216,
@@ -132,11 +132,11 @@ class _CupertinoPickerCustomState extends State<CupertinoPickerCustom> {
                       ),
                       // This is called when selected item is changed.
                       onSelectedItemChanged: (int selectedItem) {
-                        ////////////////////////////////////////////////////////////////////
+                        //////////////////////////////////////////////////////////
                         setState(() {
-                          eventTrigger(selectedItem);
+                          _selectedName = selectedItem;
                         });
-                        ////////////////////////////////////////////////////////////////////
+                        //////////////////////////////////////////////////////////
                       },
                       children: List<Widget>.generate(
                           widget.selectionsName.length, (int index) {
@@ -167,6 +167,9 @@ class _CupertinoPickerCustomState extends State<CupertinoPickerCustom> {
                         const Spacer(),
                         textButtonCustom(context, tr("done"), null, () {
                           Navigator.pop(context);
+                          ////////////////////////////////////////////////////////////////////
+                          eventTrigger(_selectedName);
+                          ////////////////////////////////////////////////////////////////////
                         }),
                       ],
                     ),
