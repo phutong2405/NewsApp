@@ -12,6 +12,8 @@
 
     "ai":"AI Summary",
 
+    "bookmarks": "Bookmarks",
+    "preference": "Preference",
     "textsize": "Text size",
     "darkmode": "Dark mode",
     "expanded": "Expanded summary",
@@ -23,5 +25,29 @@
     "small": "Small",
 
     "en" : "English",
-    "vi": "Tiếng Việt"
+    "vi": "Tiếng Việt",
+
+    "email" : "email",
+    "password": "password",
+    "confirmpassword": "confirm password",
+    "register": "Register",
+    "login": "Login",
+    "logout": "Logout",
+    "applelogin": "Login with Apple",
+    "tiktoklogin": "Login with Tiktok",
+    "gglogin": "Login with Google",
+    "forgot":"forgot password ?",
+
+    "snackbookmarkadd": "Added to your bookmarks.",
+    "snackbookmarkremove": "Removed from your bookmarks.",
+    "snacktextsize": "Text size has been changed.",
+    "snackdarkmode": "Dark mode has been changed.",
+    "snackexpanded": "Summary has been expanded.",
+    "snackauto": "Auto-translate has been changed.",
+    "snacklanguage": "Ngôn ngữ đã được thay đổi.",
+
+    "registersuccess" : "You have been registered.",
+    "logoutsuccess" : "You have been logged out.",
+    "loginsuccess" : "You have been logged in."
+
 }

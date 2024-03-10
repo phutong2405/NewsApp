@@ -2,8 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:glassmorphism_ui/glassmorphism_ui.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:newsapplication/views/widgets/fab.dart';
-import 'package:newsapplication/views/widgets/generic_widgets.dart';
+import 'package:newsapplication/views/sideview/widgets/fab.dart';
+import 'package:newsapplication/views/sideview/widgets/generic_widgets.dart';
 
 class TodayHotPage extends StatefulWidget {
   const TodayHotPage({super.key});

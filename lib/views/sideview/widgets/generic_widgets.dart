@@ -1,4 +1,3 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -38,7 +37,8 @@ Widget divineLine(
 typedef TextButtonTapped = void Function();
 
 TextButton genericTextButton(
-    {required IconData icon,
+    {required BuildContext context,
+    required IconData icon,
     required String text,
     required Color bgcolor,
     Color? colorTapped,
@@ -49,15 +49,15 @@ TextButton genericTextButton(
   return TextButton.icon(
     style: ButtonStyle(
       overlayColor:
-          MaterialStateColor.resolveWith((states) => Colors.blueAccent),
+          MaterialStateColor.resolveWith((states) => bgcolor.withAlpha(100)),
       backgroundColor:
           MaterialStatePropertyAll(!tapped ? bgcolor : colorTapped),
       shape: const MaterialStatePropertyAll(
         RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(
-            Radius.circular(10),
-          ),
-        ),
+            borderRadius: BorderRadius.all(
+              Radius.circular(10),
+            ),
+            side: BorderSide(width: 0.1)),
       ),
     ),
     onPressed: () {
@@ -66,35 +66,36 @@ TextButton genericTextButton(
     icon: Icon(
       size: sized,
       icon,
-      color: Colors.white,
+      color: Theme.of(context).colorScheme.onBackground,
     ),
     label: Text(
       text,
-      style: const TextStyle(
-        color: Colors.white,
+      style: TextStyle(
+        color: Theme.of(context).colorScheme.onBackground,
       ),
     ),
   );
 }
 
-Widget doneFilterButton(BuildContext context) {
+Widget textButtonCustom(
+    BuildContext context, String child, Color? color, Function() func) {
   return Container(
-    alignment: Alignment.centerRight,
+    // alignment: Alignment.centerRight,
     margin: const EdgeInsets.only(right: 15),
     child: CupertinoButton(
       // color: Colors.green.shade50.withOpacity(0.4),
       // borderRadius: BorderRadius.circular(10),
       // padding: const EdgeInsets.all(12),
       child: Text(
-        tr("done"),
+        child,
         overflow: TextOverflow.ellipsis,
         style: GoogleFonts.openSans(
-            color: Theme.of(context).colorScheme.onBackground,
+            color: color ?? Theme.of(context).colorScheme.onBackground,
             fontSize: 15,
             fontWeight: FontWeight.bold),
       ),
       onPressed: () {
-        Navigator.pop(context);
+        func();
       },
     ),
   );

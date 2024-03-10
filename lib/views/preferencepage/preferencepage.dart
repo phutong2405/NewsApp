@@ -1,11 +1,15 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:newsapplication/bloc/appbloc.dart';
+import 'package:newsapplication/bloc/appevent.dart';
+import 'package:newsapplication/bloc/appstate.dart';
 import 'package:newsapplication/views/preferencepage/cupertinopicker.dart';
 import 'package:newsapplication/views/preferencepage/cupertinoswitch.dart';
-import 'package:newsapplication/views/widgets/generic_widgets.dart';
+import 'package:newsapplication/views/preferencepage/login_register_page/loginpage.dart';
+import 'package:newsapplication/views/sideview/widgets/generic_widgets.dart';
 
 class PreferencePage extends StatefulWidget {
   final AppBloc appBloc;
@@ -18,77 +22,87 @@ class PreferencePage extends StatefulWidget {
 class _PreferencePageState extends State<PreferencePage> {
   @override
   Widget build(BuildContext context) {
-    return BottomSheet(
-      backgroundColor: Theme.of(context).colorScheme.background,
-      onClosing: () {},
-      builder: (context) => CustomScrollView(
-        slivers: <Widget>[
-          preferenceAppBar(context),
-          SliverList(
-            delegate: SliverChildListDelegate.fixed(
-              [
-                divineSpace(height: 10),
-                // accountInformationLogin(context),
-                accountInformation(context),
+    return Scaffold(
+      body: BlocConsumer(
+          listener: (context, state) {},
+          buildWhen: (previous, current) => current is AppLoginState,
+          bloc: widget.appBloc,
+          builder: (context, state) {
+            print("object");
+            return BottomSheet(
+              backgroundColor: Theme.of(context).colorScheme.background,
+              onClosing: () {},
+              builder: (context) => CustomScrollView(
+                slivers: <Widget>[
+                  preferenceAppBar(context),
+                  SliverList(
+                    delegate: SliverChildListDelegate.fixed(
+                      [
+                        divineSpace(height: 10),
+                        widget.appBloc.user == null
+                            ? accountInformation(context, widget.appBloc)
+                            : accountInformationLogout(context, widget.appBloc),
 
-                divineSpace(height: 30),
+                        divineSpace(height: 30),
 
-                textSize(
-                  context,
-                  widget.appBloc,
-                  SwitchType.textScaleFactor,
-                ),
-                divineSpace(height: 10),
-                listTileWswitch(
-                  context,
-                  const Icon(
-                    Icons.dark_mode_outlined,
-                    size: 20,
-                  ),
-                  tr("darkmode"),
-                  widget.appBloc,
-                  SwitchType.darkMode,
-                ),
-                divineSpace(height: 10),
-                listTileWswitch(
-                  context,
-                  const Icon(
-                    CupertinoIcons.chevron_down,
-                    size: 20,
-                  ),
-                  tr("expanded"),
-                  widget.appBloc,
-                  SwitchType.expandedSummary,
-                ),
-                // divineSpace(height: 10),
-                // warmPage(context),
+                        textSize(
+                          context,
+                          widget.appBloc,
+                          SwitchType.textScaleFactor,
+                        ),
+                        divineSpace(height: 10),
+                        listTileWswitch(
+                          context,
+                          const Icon(
+                            Icons.dark_mode_outlined,
+                            size: 20,
+                          ),
+                          tr("darkmode"),
+                          widget.appBloc,
+                          SwitchType.darkMode,
+                        ),
+                        divineSpace(height: 10),
+                        listTileWswitch(
+                          context,
+                          const Icon(
+                            CupertinoIcons.chevron_down,
+                            size: 20,
+                          ),
+                          tr("expanded"),
+                          widget.appBloc,
+                          SwitchType.expandedSummary,
+                        ),
+                        // divineSpace(height: 10),
+                        // warmPage(context),
 
-                divineSpace(height: 30),
-                listTileWswitch(
-                  context,
-                  const Icon(
-                    Icons.translate_rounded,
-                    size: 20,
+                        divineSpace(height: 30),
+                        listTileWswitch(
+                          context,
+                          const Icon(
+                            Icons.translate_rounded,
+                            size: 20,
+                          ),
+                          tr("autotrans"),
+                          widget.appBloc,
+                          SwitchType.autoTranslate,
+                        ),
+                        divineSpace(height: 10),
+                        // translateTo(
+                        //   context,
+                        //   widget.appBloc,
+                        // ),
+                        // divineSpace(height: 10),
+                        languagesChoice(
+                          context,
+                          widget.appBloc,
+                        ),
+                      ],
+                    ),
                   ),
-                  tr("autotrans"),
-                  widget.appBloc,
-                  SwitchType.autoTranslate,
-                ),
-                divineSpace(height: 10),
-                // translateTo(
-                //   context,
-                //   widget.appBloc,
-                // ),
-                // divineSpace(height: 10),
-                languagesChoice(
-                  context,
-                  widget.appBloc,
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
+                ],
+              ),
+            );
+          }),
     );
   }
 }
@@ -118,9 +132,10 @@ Widget preferenceAppBar(BuildContext context) {
     collapsedHeight: 55,
     flexibleSpace: FlexibleSpaceBar(
       title: Text(
-        'Preference',
-        style: GoogleFonts.aladin(
+        tr("preference"),
+        style: GoogleFonts.dancingScript(
           fontSize: 28,
+          fontWeight: FontWeight.bold,
           color: Theme.of(context).colorScheme.onBackground,
         ),
       ),
@@ -161,11 +176,13 @@ Widget listTileCustom({
           child: leading,
         ),
         divineSpace(width: 10),
-        SizedBox(
-          width: MediaQuery.of(context).size.width * 0.5,
+        Container(
+          constraints: BoxConstraints(
+            maxWidth: MediaQuery.of(context).size.width * 0.5,
+          ),
           child: Text(
             title,
-            maxLines: 2,
+            maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: GoogleFonts.openSans(
               fontSize: 15,
@@ -176,7 +193,7 @@ Widget listTileCustom({
         const Spacer(),
         SizedBox(
           height: 50,
-          width: 100,
+          width: 90,
           child: trailing,
         )
       ],
@@ -184,14 +201,14 @@ Widget listTileCustom({
   );
 }
 
-Widget accountInformation(BuildContext context) {
+Widget accountInformation(BuildContext context, AppBloc appBloc) {
   return listTileCustom(
     context: context,
     leading: const Icon(
       Icons.person_outline,
       size: 20,
     ),
-    title: "phutong2405@gmail.com",
+    title: "Guest",
     // trailing: IconButton(
     //     splashColor: Colors.transparent,
     //     highlightColor: Colors.transparent,
@@ -203,25 +220,35 @@ Widget accountInformation(BuildContext context) {
     trailing: CupertinoButton(
       padding: const EdgeInsets.all(5),
       child: Text(
-        "Logout",
+        tr("login"),
         style: GoogleFonts.openSans(
           fontSize: 15,
-          color: Colors.black.withRed(150),
+          color: Colors.black.withGreen(150),
         ),
       ),
-      onPressed: () {},
+      onPressed: () {
+        Navigator.push(
+          context,
+          CupertinoModalPopupRoute(
+            barrierDismissible: true,
+            semanticsDismissible: true,
+            builder: (context) => LoginPage(appBloc: appBloc),
+            // fullscreenDialog: true
+          ),
+        );
+      },
     ),
   );
 }
 
-Widget accountInformationLogin(BuildContext context) {
+Widget accountInformationLogout(BuildContext context, AppBloc appBloc) {
   return listTileCustom(
     context: context,
     leading: const Icon(
       Icons.person_outline,
       size: 20,
     ),
-    title: "Login by Google account",
+    title: appBloc.user!.email!,
     // trailing: IconButton(
     //     splashColor: Colors.transparent,
     //     highlightColor: Colors.transparent,
@@ -233,13 +260,17 @@ Widget accountInformationLogin(BuildContext context) {
     trailing: CupertinoButton(
       padding: const EdgeInsets.all(5),
       child: Text(
-        "Login",
+        "Logout",
         style: GoogleFonts.openSans(
           fontSize: 15,
-          color: Colors.black.withGreen(150),
+          color: Colors.black.withRed(150),
         ),
       ),
-      onPressed: () {},
+      onPressed: () {
+        appBloc.add(
+          AppLogoutEvent(context),
+        );
+      },
     ),
   );
 }

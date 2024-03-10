@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:newsapplication/bloc/appbloc.dart';
 import 'package:newsapplication/models/article.dart';
-import 'package:newsapplication/views/widgets/generic_widgets.dart';
+import 'package:newsapplication/views/sideview/widgets/generic_widgets.dart';
 
 // ignore: must_be_immutable
 class DetailPageBody extends StatefulWidget {

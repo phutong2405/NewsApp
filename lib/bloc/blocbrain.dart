@@ -1,7 +1,10 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:newsapplication/bloc/appbloc.dart';
 import 'package:newsapplication/models/article.dart';
+import 'package:newsapplication/services/authentication/auth.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 List<Article> data30 = articleSpawn(amount: 30);
 
@@ -35,6 +38,47 @@ void bookmarkHandler(
   data.setBookmark(article);
 }
 
+///LOG HANDLER
+Future<(User?, FirebaseAuthException?)> loginHandler(
+    {required BuildContext context,
+    required String email,
+    required String password}) async {
+  var (userFromAuth, eFromAuth) =
+      await AuthService().login(email: email, password: password);
+  return (userFromAuth, eFromAuth);
+}
+
+Future<(bool, FirebaseAuthException?)> registerHandler(
+    {required BuildContext context,
+    required String email,
+    required String password,
+    required String confirmPassword}) async {
+  FirebaseAuthException? registerReturn = await AuthService().registration(
+    email: email,
+    password: password,
+    confirmPassword: confirmPassword,
+  );
+  if (registerReturn != null) {
+    return (false, registerReturn);
+  } else {
+    return (true, null);
+  }
+}
+
+Future<bool> logoutHandler(BuildContext context, User? user) async {
+  if (user != null) {
+    int logged = await AuthService().logout(user: user);
+
+    if (logged == 1) {
+      return true;
+    } else {
+      return false;
+    }
+  } else {
+    return false;
+  }
+}
+
 ///SETTINGS HANDLER
 void darkModeHandler(AppBloc appBloc, bool value) {
   appBloc.localSettingDataService.setDarkMode();
@@ -49,9 +93,11 @@ void textScaleHandler(AppBloc appBloc, int position) {
   switch (position) {
     case 0:
       textScaleFactor = 0.88;
+      break;
 
     case 1:
       textScaleFactor = 0.94;
+      break;
 
     case 2:
       textScaleFactor = 1;
@@ -72,4 +118,13 @@ void languageHandler(AppBloc appBloc, BuildContext context) {
   }
 
   EasyLocalization.of(context)!.setLocale(newLocale);
+}
+
+void launchURLInBrowser(String url) async {
+  final uri = Uri.parse(url);
+  if (await canLaunchUrl(uri)) {
+    await launchUrl(uri);
+  } else {
+    throw 'Could not launch $uri';
+  }
 }

@@ -12,6 +12,8 @@
 
     "ai":"Tóm tắt theo AI",
 
+    "bookmarks": "Dấu Trang",
+    "preference": "Cài Đặt",
     "textsize": "Kích thước chữ",
     "darkmode": "Chế độ tối",
     "expanded": "Mở rộng bản tóm tắt ",
@@ -23,5 +25,27 @@
     "small": "Nhỏ",
 
     "en": "English",
-"vi" : "Tiếng Việt"
+    "vi" : "Tiếng Việt",
+
+    "email" : "tài khoản",
+    "password": "mật khẩu",
+    "confirmpassword": "nhập lại mật khẩu",
+    "register": "đăng ký",
+    "login": "đăng nhập",
+    "logout": "đăng xuất",
+    "applelogin": "Đăng nhập với Apple ID",
+    "tiktoklogin": "Đăng nhập với Tiktok ID",
+    "gglogin": "Đăng nhập với Google",
+    "forgot":"quên mật khẩu ?",
+    "registersuccess" : "Đăng ký thành công.",
+    "logoutsuccess" : "Đăng xuất thành công.",
+    "loginsuccess" : "Đăng nhập thành công.",
+    
+    "snackbookmarkadd": "Đã thêm vào dấu trang.",
+    "snackbookmarkremove": "Đã xóa khỏi dấu trang.",
+    "snacktextsize": "Kích thước chữ đã được thay đổi.",
+    "snackdarkmode": "Chế độ tối đã được thay đổi.",
+    "snackexpanded": "Chế độ mở rộng tóm tắt đã được thay đổi.",
+    "snackauto": "Dịch tự động đã được thay đổi.",
+    "snacklanguage": "Language has been changed."
 }

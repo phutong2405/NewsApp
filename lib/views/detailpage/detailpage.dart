@@ -4,7 +4,7 @@ import 'package:newsapplication/bloc/appbloc.dart';
 import 'package:newsapplication/models/article.dart';
 import 'package:newsapplication/views/detailpage/detailpage_appbar.dart';
 import 'package:newsapplication/views/detailpage/detailpage_body.dart';
-import 'package:newsapplication/views/widgets/fab.dart';
+import 'package:newsapplication/views/sideview/widgets/fab.dart';
 
 class DetailPage extends StatelessWidget {
   final AppBloc appBloc;

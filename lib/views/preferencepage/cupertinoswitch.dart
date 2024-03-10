@@ -43,6 +43,7 @@ class _CupertinoSwitchCustomState extends State<CupertinoSwitchCustom> {
   void eventTrigger(bool value) {
     widget.appBloc.add(
       AppSettingChangedSwitchEvent(
+        context: context,
         switchType: widget.switchType,
         isOn: value,
       ),

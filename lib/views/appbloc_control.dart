@@ -3,9 +3,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:newsapplication/bloc/appbloc.dart';
-import 'package:newsapplication/bloc/appevent.dart';
 import 'package:newsapplication/bloc/appstate.dart';
+import 'package:newsapplication/services/authentication/auth_error.dart';
 import 'package:newsapplication/views/home/homepage.dart';
+import 'package:newsapplication/views/sideview/overlays/generic_dialog.dart';
+import 'package:newsapplication/views/sideview/overlays/loading_dialog.dart';
+import 'package:newsapplication/views/sideview/widgets/snackbar.dart';
 
 class BlocControl extends StatefulWidget {
   final AppBloc appBloc;
@@ -18,60 +21,6 @@ class BlocControl extends StatefulWidget {
 class _BlocControlState extends State<BlocControl> {
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer(
-      bloc: widget.appBloc,
-      listenWhen: (previous, current) => current is AppActionState,
-      listener: (context, state) {},
-      builder: (context, state) {
-        switch (state.runtimeType) {
-          case AppLoaddedState:
-            state as AppLoaddedState;
-            return mainPage(
-              context,
-              widget.appBloc,
-              HomePage(appBloc: widget.appBloc, data: state.data),
-            );
-
-          case AppRefreshingState:
-            return mainPage(
-              context,
-              widget.appBloc,
-              Scaffold(
-                backgroundColor: Theme.of(context).colorScheme.background,
-                body: CustomScrollView(
-                  slivers: <Widget>[
-                    ///AppBar
-                    homepageAppBar(context, widget.appBloc),
-                    const SliverToBoxAdapter(
-                      child: CupertinoActivityIndicator(radius: 12),
-                    )
-                    //Body
-                  ],
-                ),
-              ),
-            );
-
-          case AppLoaddingState:
-            return mainPage(
-              context,
-              widget.appBloc,
-              Scaffold(
-                backgroundColor: Theme.of(context).colorScheme.background,
-                body: const Center(
-                  child: CircularProgressIndicator(),
-                ),
-              ),
-            );
-
-          default:
-            return const SizedBox();
-        }
-      },
-    );
-  }
-
-  Widget mainPage(BuildContext context, AppBloc appBloc, Widget home) {
-    print("run");
     return MaterialApp(
       title: 'News App',
       debugShowCheckedModeBanner: false,
@@ -85,7 +34,86 @@ class _BlocControlState extends State<BlocControl> {
       localizationsDelegates: context.localizationDelegates,
       supportedLocales: context.supportedLocales,
       locale: context.locale,
-      home: home,
+      home: BlocConsumer(
+        bloc: widget.appBloc,
+        listenWhen: (previous, current) =>
+            current is AppState || current is EventSuccessfulState,
+        listener: (context, state) {
+          if (state is AppLoadingEventState) {
+            LoadingOverlay.instance().hide();
+            LoadingOverlay.instance().show(
+              context: context,
+            );
+          }
+
+          if (state is AppSnackBarState) {
+            ScaffoldMessenger.of(context).hideCurrentSnackBar();
+            final snackBar = snackBarCustom(context, state.content);
+            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          }
+
+          if (state is EventSuccessfulState) {
+            LoadingOverlay.instance().hide();
+            Navigator.pop(context);
+            showGenericDialog(
+              context: context,
+              title: "Successful",
+              content: state.content,
+              dialogOption: () => {'OK': false},
+            );
+          }
+
+          if (state is EventFailState) {
+            LoadingOverlay.instance().hide();
+            final eTitle = AuthError.from(state.error).dialogTitle;
+            final eText = AuthError.from(state.error).dialogText;
+            showGenericDialog(
+              context: context,
+              title: eTitle,
+              content: eText,
+              dialogOption: () => {'OK': false},
+            );
+          }
+
+          if (state is AppOutState) {
+            // Navigator.pop(context);
+            LoadingOverlay.instance().hide();
+          }
+        },
+        builder: (context, state) {
+          switch (state.runtimeType) {
+            case const (AppLoaddedState):
+              state as AppLoaddedState;
+              return HomePage(appBloc: widget.appBloc, data: state.data);
+
+            case const (AppRefreshingState):
+              return Scaffold(
+                backgroundColor: Theme.of(context).colorScheme.background,
+                body: CustomScrollView(
+                  slivers: <Widget>[
+                    ///AppBar
+                    homepageAppBar(context, widget.appBloc),
+                    const SliverToBoxAdapter(
+                      child: CupertinoActivityIndicator(radius: 12),
+                    )
+                    //Body
+                  ],
+                ),
+              );
+
+            case const (AppLoaddingState):
+              return Scaffold(
+                backgroundColor: Theme.of(context).colorScheme.background,
+                body: const Center(
+                  child: CircularProgressIndicator(),
+                ),
+              );
+
+            default:
+              return const SizedBox();
+          }
+        },
+      ),
     );
   }
 }

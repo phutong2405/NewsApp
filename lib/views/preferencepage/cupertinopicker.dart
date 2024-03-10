@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -5,7 +6,7 @@ import 'package:newsapplication/bloc/appbloc.dart';
 import 'package:newsapplication/bloc/appevent.dart';
 import 'package:newsapplication/views/preferencepage/cupertinoswitch.dart';
 import 'package:newsapplication/views/preferencepage/preferencepage.dart';
-import 'package:newsapplication/views/widgets/generic_widgets.dart';
+import 'package:newsapplication/views/sideview/widgets/generic_widgets.dart';
 
 const double _kItemExtent = 32.0;
 
@@ -164,7 +165,9 @@ class _CupertinoPickerCustomState extends State<CupertinoPickerCustom> {
                           ),
                         ),
                         const Spacer(),
-                        doneFilterButton(context),
+                        textButtonCustom(context, tr("done"), null, () {
+                          Navigator.pop(context);
+                        }),
                       ],
                     ),
                   ),

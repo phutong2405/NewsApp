@@ -9,7 +9,7 @@ import 'package:newsapplication/bloc/appstate.dart';
 import 'package:newsapplication/models/article.dart';
 import 'package:newsapplication/views/bookmarkpage/bookmarkpage.dart';
 import 'package:newsapplication/views/detailpage/detailpage.dart';
-import 'package:newsapplication/views/widgets/fab.dart';
+import 'package:newsapplication/views/sideview/widgets/fab.dart';
 import 'package:newsapplication/views/preferencepage/preferencepage.dart';
 
 class HomePage extends StatefulWidget {
@@ -84,10 +84,11 @@ Widget homepageAppBar(BuildContext context, AppBloc appBloc) {
       centerTitle: true,
       collapseMode: CollapseMode.none,
       title: Text(
-        'NewNews',
-        style: GoogleFonts.aladin(
+        'Tinews',
+        style: GoogleFonts.dancingScript(
           color: Theme.of(context).colorScheme.onBackground,
-          fontSize: 28,
+          fontSize: 30,
+          fontWeight: FontWeight.bold,
         ),
       ),
     ),
@@ -208,6 +209,10 @@ Widget newsListTile(
               },
               child: newsListTileView(context, appBloc, data[index]),
             ),
+            if (index == data.length - 1)
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.1,
+              ),
             const Divider()
           ],
         );

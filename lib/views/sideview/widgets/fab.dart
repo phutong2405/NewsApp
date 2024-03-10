@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:glassmorphism_ui/glassmorphism_ui.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:newsapplication/views/filterpage/filterpage.dart';
-import 'package:newsapplication/views/widgets/generic_widgets.dart';
+import 'package:newsapplication/views/sideview/widgets/generic_widgets.dart';
 
 Widget fabToTop(BuildContext context) {
   return fabSFBlueprint(
@@ -36,7 +36,7 @@ Widget fabHomePage(BuildContext context, ScrollController controller) {
             Container(
               constraints: const BoxConstraints(maxWidth: 180, maxHeight: 50),
               child: Text(
-                "The New York Times",
+                "tinhte",
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
                 style: GoogleFonts.openSans(

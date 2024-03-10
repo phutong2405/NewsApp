@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -6,7 +7,7 @@ import 'package:newsapplication/bloc/appbloc.dart';
 import 'package:newsapplication/bloc/appstate.dart';
 import 'package:newsapplication/models/article.dart';
 import 'package:newsapplication/views/home/homepage.dart';
-import 'package:newsapplication/views/widgets/fab.dart';
+import 'package:newsapplication/views/sideview/widgets/fab.dart';
 
 class BookmarkPage extends StatefulWidget {
   final AppBloc appBloc;
@@ -69,8 +70,12 @@ Widget bookmarkAppBar(BuildContext context) {
     collapsedHeight: 50,
     flexibleSpace: FlexibleSpaceBar(
       title: Text(
-        'Bookmarks',
-        style: GoogleFonts.aladin(color: Colors.yellow.shade700, fontSize: 28),
+        tr("bookmarks"),
+        style: GoogleFonts.dancingScript(
+          color: Colors.yellow.shade800,
+          fontSize: 28,
+          fontWeight: FontWeight.bold,
+        ),
       ),
     ),
   );

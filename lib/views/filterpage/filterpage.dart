@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:glassmorphism_ui/glassmorphism_ui.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:newsapplication/views/widgets/generic_widgets.dart';
+import 'package:newsapplication/views/sideview/widgets/generic_widgets.dart';
 
 class FilterPage extends StatefulWidget {
   const FilterPage({super.key});
@@ -33,14 +33,21 @@ class _FilterPageState extends State<FilterPage> {
               ),
               divineSpace(height: MediaQuery.of(context).size.width * 0.1),
               gridTitle(context, tr("byCategories")),
-              divineSpace(height: 10),
+              divineSpace(height: 5),
               filterGrid(context, kNewsCategories),
               divineSpace(height: MediaQuery.of(context).size.width * 0.1),
               gridTitle(context, tr("byPages")),
-              divineSpace(height: 10),
+              divineSpace(height: 5),
               filterGrid(context, kFamousNewspapers),
-              divineSpace(height: 15),
-              doneFilterButton(context),
+              divineSpace(height: 10),
+              Container(
+                  alignment: Alignment.centerRight,
+                  child: textButtonCustom(
+                    context,
+                    tr("done"),
+                    null,
+                    () => Navigator.pop(context),
+                  )),
             ],
           )),
     );
@@ -53,7 +60,7 @@ Widget filterPageBackground(BuildContext context, List<Widget> widgets) {
     color: Theme.of(context).colorScheme.background.withOpacity(0.7),
     child: Container(
       padding: EdgeInsets.only(
-          top: MediaQuery.of(context).size.height > 800 ? 80 : 50,
+          top: MediaQuery.of(context).size.height > 800 ? 80 : 30,
           left: 15,
           right: 0),
       width: MediaQuery.of(context).size.width,
@@ -81,6 +88,7 @@ Widget filterGrid(BuildContext context, Map data) {
           crossAxisSpacing: 10,
           mainAxisSpacing: 10,
         ),
+        padding: const EdgeInsets.only(right: 8),
         itemCount: data.length,
         itemBuilder: (context, index) {
           return Container(

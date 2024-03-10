@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:newsapplication/bloc/appbloc.dart';
 import 'package:newsapplication/bloc/appevent.dart';
 import 'package:newsapplication/models/article.dart';
-import 'package:newsapplication/views/widgets/generic_widgets.dart';
+import 'package:newsapplication/views/sideview/widgets/generic_widgets.dart';
 
 class DetailPageAppBar extends StatefulWidget {
   final AppBloc appBloc;
@@ -44,7 +44,10 @@ class _DetailPageAppBarState extends State<DetailPageAppBar> {
             splashColor: Colors.transparent,
             highlightColor: Colors.transparent,
             color: Theme.of(context).colorScheme.onBackground,
-            onPressed: () {},
+            onPressed: () {
+              widget.appBloc
+                  .add(WebCliked(context: context, url: "https://tinhte.vn"));
+            },
             icon: const Icon(CupertinoIcons.globe)),
         IconButton(
             splashColor: Colors.transparent,

@@ -1,14 +1,18 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LocalSettingDataService {
   LocalSettingDataService._();
   static final LocalSettingDataService instance = LocalSettingDataService._();
 
-  double _textScaleFactor = 0.94;
-  bool _darkMode = false;
-  bool _expandedSummary = false;
-  String _language = "en";
+  // double _textScaleFactor = 0.94;
+  // bool _darkMode = false;
+  // bool _expandedSummary = false;
+  // String _language = "en";
+
+  late double _textScaleFactor;
+  late bool _darkMode = false;
+  late bool _expandedSummary;
+  late String _language;
 
   Future inital() async {
     final LocalSettingData localSettingData = LocalSettingData();
