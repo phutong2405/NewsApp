@@ -15,6 +15,8 @@ class AppRefreshEvent implements AppEvent {
   const AppRefreshEvent();
 }
 
+///DETAIL CLICKING
+
 class BookmarkClicked implements AppEvent {
   final Article article;
   const BookmarkClicked({required this.article});
@@ -24,6 +26,12 @@ class WebCliked implements AppEvent {
   final BuildContext context;
   final String url;
   const WebCliked({required this.context, required this.url});
+}
+
+class TranslateClicked implements AppEvent {
+  final bool isTranslate;
+  final String content;
+  const TranslateClicked({required this.isTranslate, required this.content});
 }
 
 ///LOG IN

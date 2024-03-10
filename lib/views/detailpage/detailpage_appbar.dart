@@ -45,8 +45,9 @@ class _DetailPageAppBarState extends State<DetailPageAppBar> {
             highlightColor: Colors.transparent,
             color: Theme.of(context).colorScheme.onBackground,
             onPressed: () {
-              widget.appBloc
-                  .add(WebCliked(context: context, url: widget.article.url));
+              // widget.appBloc
+              //     .add(WebCliked(context: context, url: widget.article.url));
+              widget.appBloc.add(WebCliked(context: context, url: "tinhte.vn"));
             },
             icon: const Icon(CupertinoIcons.globe)),
         IconButton(
@@ -73,6 +74,9 @@ class _DetailPageAppBarState extends State<DetailPageAppBar> {
             onPressed: () {
               setState(() {
                 _isSelected = !_isSelected;
+                widget.appBloc.add(TranslateClicked(
+                    isTranslate: !_isSelected,
+                    content: widget.article.content));
               });
             },
             icon: !_isSelected
