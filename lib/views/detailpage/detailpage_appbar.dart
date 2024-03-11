@@ -25,7 +25,10 @@ class _DetailPageAppBarState extends State<DetailPageAppBar> {
           CupertinoIcons.back,
           color: Theme.of(context).colorScheme.onBackground,
         ),
-        onPressed: () => Navigator.of(context).pop(),
+        onPressed: () {
+          widget.appBloc.isTranslate = false;
+          Navigator.of(context).pop();
+        },
       ),
       pinned: false,
       floating: true,
@@ -47,7 +50,8 @@ class _DetailPageAppBarState extends State<DetailPageAppBar> {
             onPressed: () {
               // widget.appBloc
               //     .add(WebCliked(context: context, url: widget.article.url));
-              widget.appBloc.add(WebCliked(context: context, url: "tinhte.vn"));
+              widget.appBloc
+                  .add(WebCliked(context: context, url: "https://tinhte.vn"));
             },
             icon: const Icon(CupertinoIcons.globe)),
         IconButton(
@@ -74,9 +78,10 @@ class _DetailPageAppBarState extends State<DetailPageAppBar> {
             onPressed: () {
               setState(() {
                 _isSelected = !_isSelected;
+                print(_isSelected);
+                print("tapped");
                 widget.appBloc.add(TranslateClicked(
-                    isTranslate: !_isSelected,
-                    content: widget.article.content));
+                    isTranslate: _isSelected, article: widget.article));
               });
             },
             icon: !_isSelected

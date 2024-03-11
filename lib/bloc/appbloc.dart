@@ -7,16 +7,17 @@ import 'package:newsapplication/bloc/appstate.dart';
 import 'package:newsapplication/bloc/blocbrain.dart';
 import 'package:newsapplication/data/localdata.dart';
 import 'package:newsapplication/models/article.dart';
-import 'package:newsapplication/services/fetchdata/chat_repo.dart';
 import 'package:newsapplication/services/fetchdata/news_fetch.dart';
 import 'package:newsapplication/views/preferencepage/cupertinoswitch.dart';
 
 class AppBloc extends Bloc<AppEvent, AppState> {
+  bool isLoading = false;
   User? user;
-  bool isTranslated = false;
-  String contentTranslated = "";
   late List<Article> data;
   final List<Article> bookmarkList = [];
+
+  bool isTranslate = false;
+  Map<String, String> translateItemList = {};
   final LocalSettingDataService localSettingDataService =
       LocalSettingDataService.instance;
 
@@ -57,23 +58,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       AppRefreshEvent event, Emitter<AppState> emit) async {
     emit(const AppRefreshingState());
     data = await FetchingService().fetchData();
-    print(data);
-    for (var element in data) {
-      print("-------------");
-      print(element.author);
-      print(element.title);
-      print(element.content);
-      print(element.description);
-      print(element.publishedAt);
-      print(element.source);
-      print(element.url);
-      print(element.urlToImage);
-      print("-------------");
-    }
-    await Future.delayed(
-      const Duration(milliseconds: 500),
-      () => emit(AppLoaddedState(data: data)),
-    );
+    emit(AppLoaddedState(data: data));
   }
 
   ///BOOKMARK CLICKED
@@ -96,6 +81,21 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     } catch (e) {
       // emit(EventFailState(e));
     }
+  }
+
+  FutureOr<void> translateClicked(
+      TranslateClicked event, Emitter<AppState> emit) async {
+    isTranslate = event.isTranslate;
+    isLoading = true;
+    if (event.isTranslate == true) {
+      if (translateItemList.containsKey(event.article.url)) {
+      } else {
+        translateItemList = await translateHandler(
+            event.isTranslate, translateItemList, event.article);
+      }
+    }
+    isLoading = false;
+    emit(AppLoaddedState(data: data));
   }
 
   ///SETTINGS CLICKED
@@ -194,20 +194,5 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       emit(EventSuccessfulState(tr("logoutsuccess")));
       emit(AppLoaddedState(data: data));
     } else {}
-  }
-
-  FutureOr<void> translateClicked(
-      TranslateClicked event, Emitter<AppState> emit) async {
-    emit(const AppLoaddingState());
-    isTranslated = !isTranslated;
-
-    if (event.isTranslate == true) {
-      contentTranslated = await getAnswer(content: event.content);
-    } else {
-      contentTranslated = "Đang thực hiện dịch...";
-    }
-
-    print(contentTranslated);
-    emit(AppLoaddedState(data: data));
   }
 }

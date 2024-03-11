@@ -23,8 +23,6 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final ScrollController controller = ScrollController();
-  // late ScrollController controllerHot;
-  // bool fabIsVisible = true;
 
   @override
   Widget build(BuildContext context) {
@@ -436,7 +434,7 @@ Widget newsListTileView(
               width: MediaQuery.of(context).size.width * 0.3,
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(7),
-                  color: Colors.grey.shade400.withOpacity(0.7),
+                  color: Colors.transparent,
                   boxShadow: const [
                     BoxShadow(
                       blurRadius: 10,

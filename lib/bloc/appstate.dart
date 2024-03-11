@@ -11,6 +11,12 @@ abstract class AppLoginState implements AppState {
   const AppLoginState();
 }
 
+abstract class TranslateState implements AppState {
+  const TranslateState();
+}
+
+/// OVERALL APP STATE
+
 class AppInitialState implements AppState {
   const AppInitialState();
 }
@@ -37,6 +43,8 @@ class AppLoadingEventState implements AppState {
   const AppLoadingEventState();
 }
 
+///DETAIL OVERALL STATE
+
 class EventSuccessfulState implements AppState {
   final String content;
   const EventSuccessfulState(this.content);
@@ -51,14 +59,21 @@ class AppRefreshingState implements AppState {
   const AppRefreshingState();
 }
 
+///FEATURE STATE
+
 class BookmarkState implements AppState {
   final List<Article> data;
   const BookmarkState({required this.data});
 }
 
-// ignore: must_be_immutable
+class TranslateClickedState implements TranslateState {
+  final bool isTranslate;
+  final Map<String, String> translateItemList;
+  const TranslateClickedState(this.isTranslate, this.translateItemList);
+}
+
 class LoggedState implements AppLoginState {
-  bool isLogged = false;
+  final bool isLogged;
   LoggedState({required this.isLogged});
 }
 

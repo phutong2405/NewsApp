@@ -30,8 +30,8 @@ class WebCliked implements AppEvent {
 
 class TranslateClicked implements AppEvent {
   final bool isTranslate;
-  final String content;
-  const TranslateClicked({required this.isTranslate, required this.content});
+  final Article article;
+  const TranslateClicked({required this.isTranslate, required this.article});
 }
 
 ///LOG IN

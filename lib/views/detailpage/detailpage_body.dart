@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:newsapplication/bloc/appbloc.dart';
+import 'package:newsapplication/bloc/appstate.dart';
 import 'package:newsapplication/models/article.dart';
 import 'package:newsapplication/views/sideview/widgets/generic_widgets.dart';
 
@@ -212,29 +213,34 @@ Widget contentView(
   AppBloc appBloc,
   Article article,
 ) {
-  return BlocBuilder(
-    bloc: appBloc,
-    builder: (context, state) => Container(
-      width: MediaQuery.of(context).size.width,
-      padding: const EdgeInsets.only(
-        left: 15,
-        right: 15,
-        top: 15,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SelectableText(
-            appBloc.isTranslated ? appBloc.contentTranslated : article.content,
-            style: GoogleFonts.publicSans(
-                fontSize: 17, fontWeight: FontWeight.normal),
-            textScaleFactor: appBloc.localSettingDataService.getTextScaleFactor,
-          ),
-          footerButtonDetailPage(context, appBloc, article)
-        ],
-      ),
-    ),
-  );
+  return BlocConsumer(
+      listener: (context, state) => state is AppState,
+      bloc: appBloc,
+      // buildWhen: (previous, current) => previous is TranslateClickedState,
+      builder: (context, state) => Container(
+            width: MediaQuery.of(context).size.width,
+            padding: const EdgeInsets.only(
+              left: 15,
+              right: 15,
+              top: 15,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SelectableText(
+                  //////////////
+                  appBloc.isTranslate
+                      ? appBloc.translateItemList[article.url]!
+                      : article.content,
+                  style: GoogleFonts.publicSans(
+                      fontSize: 17, fontWeight: FontWeight.normal),
+                  textScaleFactor:
+                      appBloc.localSettingDataService.getTextScaleFactor,
+                ),
+                footerButtonDetailPage(context, appBloc, article)
+              ],
+            ),
+          ));
 }
 
 Widget footerButtonDetailPage(

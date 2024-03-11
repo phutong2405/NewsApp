@@ -4,6 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:newsapplication/bloc/appbloc.dart';
 import 'package:newsapplication/models/article.dart';
 import 'package:newsapplication/services/authentication/auth.dart';
+import 'package:newsapplication/services/fetchdata/rapid_fetch.dart';
+import 'package:newsapplication/services/fetchdata/translate_repo.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 // List<Article> data30 = articleSpawn(amount: 30);
@@ -120,11 +122,24 @@ void languageHandler(AppBloc appBloc, BuildContext context) {
   EasyLocalization.of(context)!.setLocale(newLocale);
 }
 
+///DETAIL CLICKED HANDLER
 void launchURLInBrowser(String url) async {
   final uri = Uri.parse(url);
   if (await canLaunchUrl(uri)) {
     await launchUrl(uri);
   } else {
     throw 'Could not launch $uri';
+  }
+}
+
+Future<Map<String, String>> translateHandler(bool buttonStatus,
+    Map<String, String> translateItemMap, Article article) async {
+  if (buttonStatus == true) {
+    final translatedContent = await getTranslate(article.content);
+    final tmpMap = translateItemMap;
+    tmpMap.addAll({article.url: translatedContent ?? ""});
+    return tmpMap;
+  } else {
+    return translateItemMap;
   }
 }
