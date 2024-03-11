@@ -7,6 +7,7 @@ I have build an app for news-reader with a nice and user friendly UX/UI. Support
 
 Features:
 
+- Responsive App.
 - Managing States. (Bloc)
 - Fetching News. (NewsAPI)
 - Translate to a specific language. (Google Translate API)
