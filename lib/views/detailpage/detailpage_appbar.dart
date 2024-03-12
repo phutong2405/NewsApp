@@ -21,12 +21,14 @@ class _DetailPageAppBarState extends State<DetailPageAppBar> {
   Widget build(BuildContext context) {
     return SliverAppBar(
       leading: IconButton(
+        splashColor: Colors.transparent,
+        highlightColor: Colors.transparent,
         icon: Icon(
           CupertinoIcons.back,
           color: Theme.of(context).colorScheme.onBackground,
         ),
         onPressed: () {
-          widget.appBloc.isTranslate = false;
+          // widget.appBloc.isTranslate = false;
           Navigator.of(context).pop();
         },
       ),
@@ -78,10 +80,10 @@ class _DetailPageAppBarState extends State<DetailPageAppBar> {
             onPressed: () {
               setState(() {
                 _isSelected = !_isSelected;
-                print(_isSelected);
-                print("tapped");
-                widget.appBloc.add(TranslateClicked(
-                    isTranslate: _isSelected, article: widget.article));
+                // print(_isSelected);
+                // print("tapped");
+                // widget.appBloc.add(TranslateClicked(
+                //     isTranslate: _isSelected, article: widget.article));
               });
             },
             icon: !_isSelected

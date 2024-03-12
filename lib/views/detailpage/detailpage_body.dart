@@ -229,9 +229,10 @@ Widget contentView(
               children: [
                 SelectableText(
                   //////////////
-                  appBloc.isTranslate
-                      ? appBloc.translateItemList[article.url]!
-                      : article.content,
+                  // appBloc.isTranslate
+                  //     ? appBloc.translateItemList[article.url]!
+                  //     : article.content,
+                  article.content,
                   style: GoogleFonts.publicSans(
                       fontSize: 17, fontWeight: FontWeight.normal),
                   textScaleFactor:

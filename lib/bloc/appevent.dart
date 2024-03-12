@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:newsapplication/models/article.dart';
+import 'package:newsapplication/models/category_item.dart';
 import 'package:newsapplication/views/preferencepage/cupertinoswitch.dart';
 
 @immutable
@@ -13,6 +14,12 @@ class AppInitialEvent implements AppEvent {
 
 class AppRefreshEvent implements AppEvent {
   const AppRefreshEvent();
+}
+
+///FILTER CLICKING
+class FilterClicked implements AppEvent {
+  final CategoryItem categoryItem;
+  const FilterClicked(this.categoryItem);
 }
 
 ///DETAIL CLICKING

@@ -40,7 +40,6 @@ class _BlocControlState extends State<BlocControl> {
             current is AppState || current is EventSuccessfulState,
         listener: (context, state) {
           if (state is AppLoadingEventState) {
-            print("trggier");
             LoadingOverlay.instance().hide();
             LoadingOverlay.instance().show(
               context: context,

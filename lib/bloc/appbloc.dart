@@ -1,12 +1,14 @@
 import 'dart:async';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:newsapplication/bloc/appevent.dart';
 import 'package:newsapplication/bloc/appstate.dart';
 import 'package:newsapplication/bloc/blocbrain.dart';
 import 'package:newsapplication/data/localdata.dart';
 import 'package:newsapplication/models/article.dart';
+import 'package:newsapplication/models/category_item.dart';
 import 'package:newsapplication/services/fetchdata/news_fetch.dart';
 import 'package:newsapplication/views/preferencepage/cupertinoswitch.dart';
 
@@ -15,20 +17,31 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   User? user;
   late List<Article> data;
   final List<Article> bookmarkList = [];
+  CategoryItem filterItem = const CategoryItem(
+    id: "",
+    name: "General",
+    icon: Icon(CupertinoIcons.checkmark_alt),
+    isPage: false,
+  );
 
-  bool isTranslate = false;
-  Map<String, String> translateItemList = {};
+  // bool isTranslate = false;
+  // Map<String, String> translateItemList = {};
+
   final LocalSettingDataService localSettingDataService =
       LocalSettingDataService.instance;
 
   AppBloc() : super(const AppInitialState()) {
+    ///Main Event
     on<AppInitialEvent>(appInitialEvent);
     on<AppRefreshEvent>(appRefreshEvent);
 
-    ////Function Clicked
+    ///Filter Clicked
+    on<FilterClicked>(filterClicked);
+
+    ///Function Clicked
     on<BookmarkClicked>(bookmarkClicked);
     on<WebCliked>(webCliked);
-    on<TranslateClicked>(translateClicked);
+    // on<TranslateClicked>(translateClicked);
 
     ///Settings Data Update
     on<AppSettingChangedSwitchEvent>(appSettingChangedSwitchEvent);
@@ -46,7 +59,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       AppInitialEvent event, Emitter<AppState> emit) async {
     await localSettingDataService.inital();
     emit(const AppLoaddingState());
-    data = await FetchingService().fetchData();
+    data = await FetchingService().fetchData(filterItem);
     // data = data30;
     await Future.delayed(
       const Duration(milliseconds: 500),
@@ -57,8 +70,18 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   FutureOr<void> appRefreshEvent(
       AppRefreshEvent event, Emitter<AppState> emit) async {
     emit(const AppRefreshingState());
-    data = await FetchingService().fetchData();
+    data = await FetchingService().fetchData(filterItem);
     emit(AppLoaddedState(data: data));
+  }
+
+  FutureOr<void> filterClicked(
+      FilterClicked event, Emitter<AppState> emit) async {
+    if (event.categoryItem != filterItem) {
+      filterItem = event.categoryItem;
+      emit(const AppLoaddingState());
+      data = await FetchingService().fetchData(filterItem);
+      emit(AppLoaddedState(data: data));
+    }
   }
 
   ///BOOKMARK CLICKED
@@ -83,20 +106,20 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     }
   }
 
-  FutureOr<void> translateClicked(
-      TranslateClicked event, Emitter<AppState> emit) async {
-    isTranslate = event.isTranslate;
-    isLoading = true;
-    if (event.isTranslate == true) {
-      if (translateItemList.containsKey(event.article.url)) {
-      } else {
-        translateItemList = await translateHandler(
-            event.isTranslate, translateItemList, event.article);
-      }
-    }
-    isLoading = false;
-    emit(AppLoaddedState(data: data));
-  }
+  // FutureOr<void> translateClicked(
+  //     TranslateClicked event, Emitter<AppState> emit) async {
+  //   isTranslate = event.isTranslate;
+  //   isLoading = true;
+  //   if (event.isTranslate == true) {
+  //     if (translateItemList.containsKey(event.article.url)) {
+  //     } else {
+  //       translateItemList = await translateHandler(
+  //           event.isTranslate, translateItemList, event.article);
+  //     }
+  //   }
+  //   isLoading = false;
+  //   emit(AppLoaddedState(data: data));
+  // }
 
   ///SETTINGS CLICKED
   FutureOr<void> appSettingChangedSwitchEvent(

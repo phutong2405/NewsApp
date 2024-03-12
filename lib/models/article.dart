@@ -112,14 +112,15 @@ class Article {
 
   factory Article.fromJson(Map<String, dynamic> json) {
     return Article(
-      source: json['source'] as Map<String, dynamic>,
-      author: json['author'] as String,
-      title: json['title'] as String,
-      description: json['description'] as String,
-      url: json['url'] as String,
-      urlToImage: json['urlToImage'] as String,
-      publishedAt: json['publishedAt'] as String,
-      content: json['content'] as String,
+      source: json['source'] ?? {},
+      author: json['author'] ?? "unknown",
+      title: json['title'] ?? "",
+      description: json['description'] ?? "",
+      url: json['url'] ?? "",
+      urlToImage: json['urlToImage'] ??
+          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS3ML1xnP38M2WCZRE6KEyTAb4eZXNUvQXfeg&usqp=CAU",
+      publishedAt: json['publishedAt'] ?? "",
+      content: json['content'] ?? "",
       isBookmarked: false,
     );
   }

@@ -71,6 +71,7 @@ class _HomePageState extends State<HomePage> {
       ),
       floatingActionButton: fabHomePage(
         context,
+        widget.appBloc,
         controller,
       ),
     );
@@ -367,7 +368,6 @@ Widget newsListTileView(
               height: 90,
               width: MediaQuery.of(context).size.width * 0.6,
               child: Text(
-                // "Qualcomm bán Snapdragon 8 Gen 3 giá 200 USD, Qualcomm bán Snapdragon 8 Gen 3 giá 200 USD, có phải lý do S24 Ultra tăng giá?",
                 article.title,
                 maxLines: 4,
                 overflow: TextOverflow.ellipsis,
@@ -387,19 +387,23 @@ Widget newsListTileView(
               alignment: Alignment.centerLeft,
               padding: const EdgeInsets.only(left: 10),
               // color: Colors.blue,
-              width: MediaQuery.of(context).size.width * 0.6,
+              width: MediaQuery.of(context).size.width * 0.65,
               height: 40,
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   SizedBox(
                     // width: 190,
+                    width: MediaQuery.of(context).size.width * 0.5,
+
                     child: Text(
                       // "The New York Time \n40 minutes ago",
                       // "${article.author} \n${article.publishedAt}",
                       "${article.author} \n40 minutes ago",
+                      // "${article.author} ",
                       maxLines: 2,
                       style: GoogleFonts.lato(fontSize: 13),
+                      overflow: TextOverflow.fade,
                     ),
                   ),
                   const Spacer(),
@@ -478,7 +482,7 @@ Widget hottestListTileView(
             alignment: Alignment.center,
             padding: const EdgeInsets.only(left: 10),
             // color: Colors.blue,
-            width: MediaQuery.of(context).size.width * 0.6,
+            width: MediaQuery.of(context).size.width * 0.65,
             height: 40,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -488,7 +492,7 @@ Widget hottestListTileView(
                   child: Text(
                     // "${article.author} \n${article.publishedAt}}",
                     article.author,
-                    maxLines: 2,
+                    maxLines: 1,
                     style: GoogleFonts.lato(fontSize: 13),
                     textScaleFactor:
                         appBloc.localSettingDataService.getTextScaleFactor,

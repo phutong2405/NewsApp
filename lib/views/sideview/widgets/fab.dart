@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:glassmorphism_ui/glassmorphism_ui.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:newsapplication/bloc/appbloc.dart';
 import 'package:newsapplication/views/filterpage/filterpage.dart';
 import 'package:newsapplication/views/sideview/widgets/generic_widgets.dart';
 
@@ -15,7 +16,11 @@ Widget fabToTop(BuildContext context) {
   );
 }
 
-Widget fabHomePage(BuildContext context, ScrollController controller) {
+Widget fabHomePage(
+  BuildContext context,
+  AppBloc appBloc,
+  ScrollController controller,
+) {
   return Row(
     mainAxisSize: MainAxisSize.min,
     children: [
@@ -25,7 +30,7 @@ Widget fabHomePage(BuildContext context, ScrollController controller) {
             context,
             CupertinoDialogRoute(
               context: context,
-              builder: (context) => const FilterPage(),
+              builder: (context) => FilterPage(appBloc: appBloc),
               // fullscreenDialog: true
             ),
           );
@@ -36,7 +41,7 @@ Widget fabHomePage(BuildContext context, ScrollController controller) {
             Container(
               constraints: const BoxConstraints(maxWidth: 180, maxHeight: 50),
               child: Text(
-                "BBC",
+                "${appBloc.filterItem.name} ",
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
                 style: GoogleFonts.openSans(
@@ -44,7 +49,7 @@ Widget fabHomePage(BuildContext context, ScrollController controller) {
               ),
             ),
             divineSpace(width: 10),
-            const Icon(CupertinoIcons.doc_append),
+            appBloc.filterItem.icon,
             Text(
               " | ",
               style: GoogleFonts.openSans(

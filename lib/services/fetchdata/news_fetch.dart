@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:newsapplication/models/article.dart';
 import 'package:http/http.dart' as http;
+import 'package:newsapplication/models/category_item.dart';
 
 Future<List<Article>> fetchNews(String url) async {
   try {
@@ -22,13 +23,28 @@ Future<List<Article>> fetchNews(String url) async {
 }
 
 const _apiKey = "ac6527acf98841cc92c111997368da4d";
-const _source = "bbc-news";
 
 class FetchingService {
-  final _url =
-      "https://newsapi.org/v2/top-headlines?pageSize=100&sources=$_source&apiKey=$_apiKey";
-  Future<List<Article>> fetchData() async {
-    return await fetchNews(_url);
+  // String url(String source) {
+  //   if (source == "") {
+  //     return "https://newsapi.org/v2/top-headlines/sources?apiKey=$_apiKey";
+  //   } else {
+  //     return "https://newsapi.org/v2/top-headlines?pageSize=100&sources=$source&apiKey=$_apiKey";
+  //   }
+  // }
+
+  Future<List<Article>> fetchData(CategoryItem categoryItem) async {
+    late String url;
+    if (categoryItem.name == "") {
+      url = "https://newsapi.org/v2/top-headlines?country=us&apiKey=$_apiKey";
+    } else if (categoryItem.isPage) {
+      url =
+          "https://newsapi.org/v2/top-headlines?pageSize=100&sources=${categoryItem.id}&apiKey=$_apiKey";
+    } else {
+      url =
+          "https://newsapi.org/v2/top-headlines?country=us&category=${categoryItem.id}&apiKey=$_apiKey";
+    }
+    return await fetchNews(url);
   }
 }
 
