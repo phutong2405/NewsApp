@@ -9,7 +9,9 @@ Future<List<Article>> fetchNews(String url) async {
     final response = await http.get(Uri.parse(url));
     List<dynamic> data = jsonDecode(response.body)['articles'];
     if (response.statusCode == 200) {
-      return data.map<Article>((e) => Article.fromJson(e)).toList();
+      var tmpData = data.map<Article>((e) => Article.fromJson(e)).toList();
+      tmpData.removeWhere((element) => element.urlToImage == "");
+      return tmpData;
     } else {
       // Nếu có lỗi, in ra lỗi
       print("Error: ${response.statusCode}");
@@ -35,14 +37,15 @@ class FetchingService {
 
   Future<List<Article>> fetchData(CategoryItem categoryItem) async {
     late String url;
-    if (categoryItem.name == "") {
-      url = "https://newsapi.org/v2/top-headlines?country=us&apiKey=$_apiKey";
+    if (categoryItem.id == "") {
+      url =
+          "https://newsapi.org/v2/top-headlines?pageSize=100&country=us&apiKey=$_apiKey";
     } else if (categoryItem.isPage) {
       url =
           "https://newsapi.org/v2/top-headlines?pageSize=100&sources=${categoryItem.id}&apiKey=$_apiKey";
     } else {
       url =
-          "https://newsapi.org/v2/top-headlines?country=us&category=${categoryItem.id}&apiKey=$_apiKey";
+          "https://newsapi.org/v2/top-headlines?pageSize=100&country=us&category=${categoryItem.id}&apiKey=$_apiKey";
     }
     return await fetchNews(url);
   }

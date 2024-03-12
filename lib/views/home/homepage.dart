@@ -26,6 +26,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    print(widget.data.length);
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       body: BlocBuilder(
@@ -489,6 +490,7 @@ Widget hottestListTileView(
               mainAxisSize: MainAxisSize.min,
               children: [
                 SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.5,
                   child: Text(
                     // "${article.author} \n${article.publishedAt}}",
                     article.author,

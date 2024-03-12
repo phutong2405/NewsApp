@@ -20,7 +20,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   CategoryItem filterItem = const CategoryItem(
     id: "",
     name: "General",
-    icon: Icon(CupertinoIcons.checkmark_alt),
+    icon: Icon(CupertinoIcons.collections_solid),
     isPage: false,
   );
 

@@ -43,7 +43,7 @@ final List<CategoryItem> kNewsCategories = [
   const CategoryItem(
     id: "",
     name: "General",
-    icon: Icon(CupertinoIcons.checkmark_alt),
+    icon: Icon(CupertinoIcons.collections),
     isPage: false,
   ),
   const CategoryItem(
@@ -83,37 +83,6 @@ final List<CategoryItem> kNewsCategories = [
     isPage: false,
   ),
 ];
-
-// {
-//   'General': {
-//     KFilterValue.id: "",
-//     KFilterValue.icon: const Icon(CupertinoIcons.checkmark_alt),
-//   },
-//   'Sports': {
-//     KFilterValue.id: "sports",
-//     KFilterValue.icon: const Icon(Icons.sports),
-//   },
-// 'Business': {
-//   KFilterValue.id: "business",
-//   KFilterValue.icon: const Icon(Icons.business),
-// },
-// 'Technology': {
-//   KFilterValue.id: "technology",
-//   KFilterValue.icon: const Icon(Icons.computer),
-// },
-//   'Entertainment': {
-//     KFilterValue.id: "entertainment",
-//     KFilterValue.icon: const Icon(Icons.movie),
-//   },
-//   'Health': {
-//     KFilterValue.id: "health",
-//     KFilterValue.icon: const Icon(Icons.healing),
-//   },
-//   'Science': {
-//     KFilterValue.id: "science",
-//     KFilterValue.icon: const Icon(Icons.science),
-//   },
-// };
 
 List<CategoryItem> kFamousNewspapers = [
   const CategoryItem(
