@@ -1,17 +1,17 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:google_fonts/google_fonts.dart';
 import 'package:newsapplication/bloc/appbloc.dart';
-import 'package:newsapplication/bloc/appstate.dart';
+
 import 'package:newsapplication/models/article.dart';
 import 'package:newsapplication/views/home/homepage.dart';
 import 'package:newsapplication/views/sideview/widgets/fab.dart';
 
 class BookmarkPage extends StatefulWidget {
   final AppBloc appBloc;
-  final List<Article> data;
+  final List<Article>? data;
   const BookmarkPage({super.key, required this.appBloc, required this.data});
 
   @override
@@ -23,27 +23,18 @@ class _BookmarkPageState extends State<BookmarkPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
-      body: BlocBuilder(
-        bloc: widget.appBloc,
-        builder: (context, state) {
-          if (state is AppLoaddedState) {
-            return CustomScrollView(
-              slivers: <Widget>[
-                ///AppBar
-                bookmarkAppBar(context),
+      body: CustomScrollView(
+        slivers: <Widget>[
+          ///AppBar
+          bookmarkAppBar(context),
 
-                newsListTile(
-                  context,
-                  widget.appBloc,
-                  widget.data,
-                ),
-                //Body
-              ],
-            );
-          } else {
-            return const SizedBox();
-          }
-        },
+          newsListTile(
+            context,
+            widget.appBloc,
+            widget.data ?? [],
+          ),
+          //Body
+        ],
       ),
       floatingActionButton: fabToTop(context),
     );

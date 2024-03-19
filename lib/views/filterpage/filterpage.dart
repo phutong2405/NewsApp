@@ -21,6 +21,7 @@ class _FilterPageState extends State<FilterPage> {
 
   void tapToTile(CategoryItem categoryItem) {
     widget.appBloc.add(FilterClicked(categoryItem));
+    Navigator.pop(context);
   }
 
   @override

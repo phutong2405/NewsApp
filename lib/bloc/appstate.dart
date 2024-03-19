@@ -26,7 +26,7 @@ class AppLoaddingState implements AppState {
 }
 
 class AppLoaddedState implements AppState {
-  final List<Article> data;
+  final List<Article>? data;
   const AppLoaddedState({required this.data});
 }
 
@@ -62,7 +62,7 @@ class AppRefreshingState implements AppState {
 ///FEATURE STATE
 
 class BookmarkState implements AppState {
-  final List<Article> data;
+  final List<Article>? data;
   const BookmarkState({required this.data});
 }
 

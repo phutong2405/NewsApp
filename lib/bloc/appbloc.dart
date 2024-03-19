@@ -15,8 +15,12 @@ import 'package:newsapplication/views/preferencepage/cupertinoswitch.dart';
 class AppBloc extends Bloc<AppEvent, AppState> {
   bool isLoading = false;
   User? user;
-  late List<Article> data;
-  final List<Article> bookmarkList = [];
+  late Map<String, List<Article>> data = {
+    "main": [],
+    "hotnews": [],
+    "bookmarks": [],
+    "translateddata": [],
+  };
   CategoryItem filterItem = const CategoryItem(
     id: "",
     name: "General",
@@ -54,24 +58,40 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     on<AppLogoutEvent>(appLogoutEvent);
   }
 
+  Future<void> updateData() async {
+    final tmpMain = await FetchingService().fetchData(filterItem);
+    final tmpHotnews = await FetchingService().fetchTopData(filterItem);
+    // data = data30;
+    data["main"] = tmpMain;
+    data["hotnews"] = tmpHotnews;
+  }
+
+  Future<void> updateTranslatedData() async {
+    final tmpMain = await FetchingService().fetchData(filterItem);
+    final tmpHotnews = await FetchingService().fetchTopData(filterItem);
+    // data = data30;
+    data["translatedmain"] = tmpMain;
+    data["translatedhotnews"] = tmpHotnews;
+  }
+
   ///MAIN EVENT
   FutureOr<void> appInitialEvent(
       AppInitialEvent event, Emitter<AppState> emit) async {
     await localSettingDataService.inital();
     emit(const AppLoaddingState());
-    data = await FetchingService().fetchData(filterItem);
-    // data = data30;
+    await updateData();
     await Future.delayed(
       const Duration(milliseconds: 500),
-      () => emit(AppLoaddedState(data: data)),
+      () => emit(AppLoaddedState(data: data["main"])),
     );
   }
 
   FutureOr<void> appRefreshEvent(
       AppRefreshEvent event, Emitter<AppState> emit) async {
     emit(const AppRefreshingState());
-    data = await FetchingService().fetchData(filterItem);
-    emit(AppLoaddedState(data: data));
+    await updateData();
+
+    emit(AppLoaddedState(data: data["main"]));
   }
 
   FutureOr<void> filterClicked(
@@ -79,19 +99,19 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     if (event.categoryItem != filterItem) {
       filterItem = event.categoryItem;
       emit(const AppLoaddingState());
-      data = await FetchingService().fetchData(filterItem);
-      emit(AppLoaddedState(data: data));
+      await updateData();
+      emit(AppLoaddedState(data: data["main"]));
     }
   }
 
   ///BOOKMARK CLICKED
   FutureOr<void> bookmarkClicked(
       BookmarkClicked event, Emitter<AppState> emit) {
-    bookmarkHandler(data, bookmarkList, event.article);
+    bookmarkHandler(data["data"], data["bookmarks"], event.article);
     emit(AppSnackBarState(event.article.isBookmarked
         ? tr("snackbookmarkadd")
         : tr("snackbookmarkremove")));
-    emit(AppLoaddedState(data: data));
+    emit(AppLoaddedState(data: data["main"]));
   }
 
   ///DETAILS CLICKED
@@ -100,7 +120,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     try {
       launchURLInBrowser(event.url);
       emit(const AppOutState());
-      emit(AppLoaddedState(data: data));
+      emit(AppLoaddedState(data: data["main"]));
     } catch (e) {
       // emit(EventFailState(e));
     }
@@ -129,12 +149,12 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         darkModeHandler(this, event.isOn);
         emit(const AppDarkModeState());
         emit(AppSnackBarState(tr("snackdarkmode")));
-        emit(AppLoaddedState(data: data));
+        emit(AppLoaddedState(data: data["main"]));
         break;
       case SwitchType.expandedSummary:
         expandedHandler(this, event.isOn);
         emit(AppSnackBarState(tr("snackexpanded")));
-        emit(AppLoaddedState(data: data));
+        emit(AppLoaddedState(data: data["main"]));
 
         break;
       default:
@@ -147,7 +167,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       case SwitchType.textScaleFactor:
         textScaleHandler(this, event.position);
         emit(AppSnackBarState(tr("snacktextsize")));
-        emit(AppLoaddedState(data: data));
+        emit(AppLoaddedState(data: data["main"]));
         break;
       default:
     }
@@ -157,7 +177,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       AppSettingChangedLanguageEvent event, Emitter<AppState> emit) {
     languageHandler(this, event.context);
     emit(AppSnackBarState(tr("snacklanguage")));
-    emit(AppLoaddedState(data: data));
+    emit(AppLoaddedState(data: data["main"]));
   }
 
   /// LOG
@@ -186,7 +206,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       emit(LoggedState(isLogged: false));
     }
     user = userFromAuth;
-    emit(AppLoaddedState(data: data));
+    emit(AppLoaddedState(data: data["main"]));
   }
 
   FutureOr<void> appRegisterEvent(
@@ -203,7 +223,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     } else {
       emit(EventFailState(e!));
     }
-    emit(AppLoaddedState(data: data));
+    emit(AppLoaddedState(data: data["main"]));
   }
 
   FutureOr<void> appLogoutEvent(
@@ -215,7 +235,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       user = null;
       emit(LoggedState(isLogged: false));
       emit(EventSuccessfulState(tr("logoutsuccess")));
-      emit(AppLoaddedState(data: data));
+      emit(AppLoaddedState(data: data["main"]));
     } else {}
   }
 }

@@ -100,17 +100,19 @@ Widget detailpageHeader(
           children: [
             Row(
               children: [
-                Text(
-                  // "The New York Time",
-                  article.author,
-                  maxLines: 2,
-                  style: GoogleFonts.lato(fontSize: 14),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.5,
+                  child: Text(
+                    article.author,
+                    maxLines: 2,
+                    style: GoogleFonts.lato(fontSize: 13),
+                  ),
                 ),
                 const Spacer(),
                 Text(
-                  "40 ${tr("minutes")}",
+                  article.publishedAt,
                   maxLines: 2,
-                  style: GoogleFonts.lato(fontSize: 14),
+                  style: GoogleFonts.lato(fontSize: 13),
                 ),
               ],
             ),
@@ -272,29 +274,3 @@ Widget footerButtonDetailPage(
     ),
   );
 }
-
-
-// Widget htmlBody() {
-//   return HtmlWidget(
-//     // the first parameter (`html`) is required
-//     // htmlString,
-//     "",
-//     customStylesBuilder: (element) {
-//       if (element.classes.contains('foo')) {
-//         return {'color': 'red'};
-//       }
-
-//       return null;
-//     },
-
-//     // this callback will be triggered when user taps a link
-
-//     // select the render mode for HTML body
-//     // by default, a simple `Column` is rendered
-//     // consider using `ListView` or `SliverList` for better performance
-//     renderMode: RenderMode.column,
-
-//     // set the default styling for text
-//     textStyle: GoogleFonts.roboto(fontSize: 15),
-//   );
-// }

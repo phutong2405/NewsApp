@@ -1,12 +1,13 @@
 class Article {
   final Map<String, dynamic> source;
   final String author;
-  final String title;
-  final String description;
+  String title;
+  String description;
   final String url;
   final String urlToImage;
-  final String publishedAt;
-  final String content;
+  String publishedAt;
+  DateTime dateTime;
+  String content;
   bool isBookmarked;
 
   Article({
@@ -19,6 +20,7 @@ class Article {
     required this.publishedAt,
     required this.content,
     required this.isBookmarked,
+    required this.dateTime,
   });
 
   factory Article.fromJson(Map<String, dynamic> json) {
@@ -32,6 +34,7 @@ class Article {
       publishedAt: json['publishedAt'] ?? "",
       content: json['content'] ?? "",
       isBookmarked: false,
+      dateTime: DateTime.parse(json['publishedAt']),
     );
   }
 

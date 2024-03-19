@@ -23,10 +23,17 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final ScrollController controller = ScrollController();
+  late List<Article> bookmarkData;
+
+  @override
+  void initState() {
+    super.initState();
+    bookmarkData = widget.appBloc.data["bookmarks"] ?? [];
+    // preloadImg(widget.data);
+  }
 
   @override
   Widget build(BuildContext context) {
-    print(widget.data.length);
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       body: BlocBuilder(
@@ -51,12 +58,12 @@ class _HomePageState extends State<HomePage> {
                     },
                   ),
                 ),
-                hottestListTile(
+                _hottestListTile(
                   context,
                   widget.appBloc,
-                  widget.data,
+                  widget.appBloc.data["hotnews"] ?? [],
                 ),
-                trendingListTile(context),
+                _trendingListTile(context),
                 newsListTile(
                   context,
                   widget.appBloc,
@@ -153,7 +160,7 @@ Widget homepageAppBar(BuildContext context, AppBloc appBloc) {
                     context,
                     CupertinoPageRoute(
                       builder: (context) => BookmarkPage(
-                        data: appBloc.bookmarkList,
+                        data: appBloc.data["bookmarks"],
                         appBloc: appBloc,
                       ),
                       // fullscreenDialog: true
@@ -168,6 +175,83 @@ Widget homepageAppBar(BuildContext context, AppBloc appBloc) {
   );
 }
 
+// bool isToday(DateTime date) {
+//   final dateNow = DateTime.now();
+//   return date.year == dateNow.year &&
+//       date.month == dateNow.month &&
+//       date.day == dateNow.day;
+// }
+
+// bool isYesterday(DateTime date) {
+//   final dateNow = DateTime.now();
+//   return date.year == dateNow.year &&
+//       date.month == dateNow.month &&
+//       date.day == (dateNow.day - 1);
+// }
+
+// Widget newsListTile(
+//   BuildContext context,
+//   AppBloc appBloc,
+//   List<Article> data,
+// ) {
+//   return SliverList.separated(
+//     itemCount: data.length,
+//     itemBuilder: (context, index) {
+//       if (index == 0 && isToday(data[index].dateTime)) {
+//         return Container(
+//             padding: const EdgeInsets.only(
+//               right: 8,
+//               top: 8,
+//               bottom: 8,
+//             ),
+//             alignment: Alignment.centerRight,
+//             child: Text(
+//               tr("today"),
+//               style: GoogleFonts.openSans(
+//                   fontSize: 22, fontWeight: FontWeight.bold),
+//             ));
+//       } else if (index == 0 && isYesterday(data[0].dateTime)) {
+//         return Container(
+//             padding: const EdgeInsets.only(
+//               right: 8,
+//               top: 8,
+//               bottom: 8,
+//             ),
+//             alignment: Alignment.centerRight,
+//             child: Text(
+//               tr("yesterday"),
+//               style: GoogleFonts.openSans(
+//                   fontSize: 22, fontWeight: FontWeight.bold),
+//             ));
+//       } else {
+//         return const SizedBox();
+//       }
+//     },
+//     separatorBuilder: (context, index) {
+//       return Column(
+//         mainAxisAlignment: MainAxisAlignment.center,
+//         crossAxisAlignment: CrossAxisAlignment.center,
+//         children: [
+//           InkWell(
+//             onTap: () {
+//               Navigator.of(context).push(MaterialPageRoute(
+//                 builder: (context) =>
+//                     DetailPage(appBloc: appBloc, article: data[index]),
+//               ));
+//             },
+//             child: _newsListTileView(context, appBloc, data[index]),
+//           ),
+//           if (index == data.length - 1)
+//             SizedBox(
+//               height: MediaQuery.of(context).size.height * 0.1,
+//             ),
+//           const Divider()
+//         ],
+//       );
+//     },
+//   );
+// }
+
 Widget newsListTile(
   BuildContext context,
   AppBloc appBloc,
@@ -175,62 +259,49 @@ Widget newsListTile(
 ) {
   return SliverList(
     delegate: SliverChildBuilderDelegate(
-      (_, int index) {
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            if (index == 0)
-              Container(
-                  padding: const EdgeInsets.only(
-                    right: 8,
-                    top: 8,
-                    bottom: 8,
-                  ),
-                  alignment: Alignment.centerRight,
+      (context, index) => Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          InkWell(
+            onTap: () {
+              final tmp = data[index];
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) =>
+                    DetailPage(appBloc: appBloc, article: tmp),
+              ));
+            },
+            child: _newsListTileView(context, appBloc, data[index]),
+          ),
+          const Divider(),
+          if (index == data.length - 1)
+            Column(
+              children: [
+                Center(
                   child: Text(
-                    tr("today"),
+                    "Out of News",
                     style: GoogleFonts.openSans(
-                        fontSize: 22, fontWeight: FontWeight.bold),
-                  ))
-            else if (index == 10)
-              Container(
-                  padding: const EdgeInsets.only(
-                    right: 8,
-                    top: 8,
-                    bottom: 8,
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.grey.shade500,
+                    ),
+                    textScaleFactor:
+                        appBloc.localSettingDataService.getTextScaleFactor,
                   ),
-                  alignment: Alignment.centerRight,
-                  child: Text(
-                    tr("yesterday"),
-                    style: GoogleFonts.openSans(
-                        fontSize: 22, fontWeight: FontWeight.bold),
-                  ))
-            else
-              const SizedBox(),
-            InkWell(
-              onTap: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) =>
-                      DetailPage(appBloc: appBloc, article: data[index]),
-                ));
-              },
-              child: newsListTileView(context, appBloc, data[index]),
+                ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.15,
+                ),
+              ],
             ),
-            if (index == data.length - 1)
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.1,
-              ),
-            const Divider()
-          ],
-        );
-      },
+        ],
+      ),
       childCount: data.length,
     ),
   );
 }
 
-Widget hottestListTile(
+Widget _hottestListTile(
     BuildContext context, AppBloc appBloc, List<Article> data) {
   return SliverToBoxAdapter(
     child: Container(
@@ -253,7 +324,7 @@ Widget hottestListTile(
                     DetailPage(appBloc: appBloc, article: data[index]),
               ));
             },
-            child: hottestListTileView(context, appBloc, data[index]),
+            child: _hottestListTileView(context, appBloc, data[index]),
           );
         },
       ),
@@ -261,7 +332,7 @@ Widget hottestListTile(
   );
 }
 
-Widget trendingListTile(BuildContext context) {
+Widget _trendingListTile(BuildContext context) {
   return SliverToBoxAdapter(
     child: Container(
         alignment: Alignment.center,
@@ -335,7 +406,7 @@ Widget trendingListTile(BuildContext context) {
   );
 }
 
-Widget newsListTileView(
+Widget _newsListTileView(
     BuildContext context, AppBloc appBloc, Article article) {
   return Container(
     alignment: Alignment.center,
@@ -395,16 +466,26 @@ Widget newsListTileView(
                 children: [
                   SizedBox(
                     // width: 190,
-                    width: MediaQuery.of(context).size.width * 0.5,
-
-                    child: Text(
-                      // "The New York Time \n40 minutes ago",
-                      // "${article.author} \n${article.publishedAt}",
-                      "${article.author} \n40 minutes ago",
-                      // "${article.author} ",
-                      maxLines: 2,
-                      style: GoogleFonts.lato(fontSize: 13),
-                      overflow: TextOverflow.fade,
+                    width: MediaQuery.of(context).size.width * 0.4,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          article.author,
+                          maxLines: 1,
+                          style: GoogleFonts.lato(fontSize: 13),
+                          textScaleFactor: appBloc
+                              .localSettingDataService.getTextScaleFactor,
+                        ),
+                        Text(
+                          article.publishedAt,
+                          maxLines: 1,
+                          style: GoogleFonts.lato(fontSize: 13),
+                          textScaleFactor: appBloc
+                              .localSettingDataService.getTextScaleFactor,
+                        ),
+                      ],
                     ),
                   ),
                   const Spacer(),
@@ -438,25 +519,21 @@ Widget newsListTileView(
               height: MediaQuery.of(context).size.width * 0.3,
               width: MediaQuery.of(context).size.width * 0.3,
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(7),
-                  color: Colors.transparent,
-                  boxShadow: const [
-                    BoxShadow(
-                      blurRadius: 10,
-                      offset: Offset(2, 2),
-                      color: Colors.grey,
-                    )
-                  ],
-                  image: DecorationImage(
-                    // image: AssetImage(
-                    //   "lib/assets/images/filterbg.jpg",
-                    // ),
-                    image: NetworkImage(
-                      // "https://photo2.tinhte.vn/data/attachment-files/2024/02/8263803_getty-uspto-patents.webp",
-                      article.urlToImage,
-                    ),
-                    fit: BoxFit.cover,
-                  )),
+                borderRadius: BorderRadius.circular(7),
+                color: Colors.transparent,
+                boxShadow: const [
+                  BoxShadow(
+                    blurRadius: 10,
+                    offset: Offset(2, 2),
+                    color: Colors.grey,
+                  )
+                ],
+                image: DecorationImage(
+                  image: _networkImageTry(article.urlToImage)
+                      as ImageProvider<Object>,
+                  fit: BoxFit.cover,
+                ),
+              ),
             )
           ],
         ),
@@ -465,7 +542,7 @@ Widget newsListTileView(
   );
 }
 
-Widget hottestListTileView(
+Widget _hottestListTileView(
   BuildContext context,
   AppBloc appBloc,
   Article article,
@@ -490,14 +567,26 @@ Widget hottestListTileView(
               mainAxisSize: MainAxisSize.min,
               children: [
                 SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.5,
-                  child: Text(
-                    // "${article.author} \n${article.publishedAt}}",
-                    article.author,
-                    maxLines: 1,
-                    style: GoogleFonts.lato(fontSize: 13),
-                    textScaleFactor:
-                        appBloc.localSettingDataService.getTextScaleFactor,
+                  width: MediaQuery.of(context).size.width * 0.4,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        article.author,
+                        maxLines: 1,
+                        style: GoogleFonts.lato(fontSize: 13),
+                        textScaleFactor:
+                            appBloc.localSettingDataService.getTextScaleFactor,
+                      ),
+                      Text(
+                        article.publishedAt,
+                        maxLines: 1,
+                        style: GoogleFonts.lato(fontSize: 13),
+                        textScaleFactor:
+                            appBloc.localSettingDataService.getTextScaleFactor,
+                      ),
+                    ],
                   ),
                 ),
                 const Spacer(),
@@ -528,13 +617,10 @@ Widget hottestListTileView(
             height: MediaQuery.of(context).size.width * 0.6,
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: NetworkImage(
-                  // "https://photo2.tinhte.vn/data/attachment-files/2024/02/8264348_Cover.jpg",
-                  article.urlToImage,
-                ),
-                fit: BoxFit.cover,
-                opacity: 0.25,
-              ),
+                  image: _networkImageTry(article.urlToImage)
+                      as ImageProvider<Object>,
+                  fit: BoxFit.cover,
+                  opacity: 0.25),
               // color: Colors.grey.shade400.withOpacity(0.7),
               color: const Color.fromARGB(
                 170,
@@ -579,4 +665,18 @@ Widget hottestListTileView(
       ],
     ),
   );
+}
+
+NetworkImage? _networkImageTry(String imgUrl) {
+  NetworkImage? placeHolder;
+  try {
+    placeHolder = NetworkImage(
+      // "https://photo2.tinhte.vn/data/attachment-files/2024/02/8264348_Cover.jpg",
+      imgUrl,
+    );
+    return placeHolder;
+  } catch (e) {
+    print("loi ne $e");
+    return null;
+  }
 }

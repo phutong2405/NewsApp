@@ -5,7 +5,6 @@ import 'package:newsapplication/bloc/appbloc.dart';
 import 'package:newsapplication/models/article.dart';
 import 'package:newsapplication/services/authentication/auth.dart';
 import 'package:newsapplication/services/fetchdata/rapid_fetch.dart';
-import 'package:newsapplication/services/fetchdata/translate_repo.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 // List<Article> data30 = articleSpawn(amount: 30);
@@ -31,13 +30,15 @@ extension AddToBookMark on List<Article> {
 }
 
 void bookmarkHandler(
-  List<Article> data,
-  List<Article> bookmarkList,
+  List<Article>? data,
+  List<Article>? bookmarkList,
   Article article,
 ) {
-  article.setBookmark();
-  bookmarkList.addToBookmark(article);
-  data.setBookmark(article);
+  if (data != []) {
+    article.setBookmark();
+    bookmarkList!.addToBookmark(article);
+    data?.setBookmark(article);
+  }
 }
 
 ///LOG HANDLER

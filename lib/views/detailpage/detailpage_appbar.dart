@@ -28,7 +28,6 @@ class _DetailPageAppBarState extends State<DetailPageAppBar> {
           color: Theme.of(context).colorScheme.onBackground,
         ),
         onPressed: () {
-          // widget.appBloc.isTranslate = false;
           Navigator.of(context).pop();
         },
       ),
@@ -50,8 +49,6 @@ class _DetailPageAppBarState extends State<DetailPageAppBar> {
             highlightColor: Colors.transparent,
             color: Theme.of(context).colorScheme.onBackground,
             onPressed: () {
-              // widget.appBloc
-              //     .add(WebCliked(context: context, url: widget.article.url));
               widget.appBloc
                   .add(WebCliked(context: context, url: "https://tinhte.vn"));
             },
@@ -61,11 +58,9 @@ class _DetailPageAppBarState extends State<DetailPageAppBar> {
             highlightColor: Colors.transparent,
             color: Theme.of(context).colorScheme.onBackground,
             onPressed: () {
-              setState(() {
-                widget.appBloc.add(
-                  BookmarkClicked(article: widget.article),
-                );
-              });
+              widget.appBloc.add(
+                BookmarkClicked(article: widget.article),
+              );
             },
             icon: !widget.article.isBookmarked
                 ? const Icon(CupertinoIcons.bookmark)
@@ -80,8 +75,6 @@ class _DetailPageAppBarState extends State<DetailPageAppBar> {
             onPressed: () {
               setState(() {
                 _isSelected = !_isSelected;
-                // print(_isSelected);
-                // print("tapped");
                 // widget.appBloc.add(TranslateClicked(
                 //     isTranslate: _isSelected, article: widget.article));
               });

@@ -25,7 +25,7 @@ class _BlocControlState extends State<BlocControl> {
       title: 'News App',
       debugShowCheckedModeBanner: false,
       themeMode: widget.appBloc.localSettingDataService.getDarkMode
-          ? ThemeMode.system
+          ? ThemeMode.dark
           : ThemeMode.light, // Hỗ trợ dark mode theo hệ thống
       darkTheme: ThemeData.dark(), // Giao diện dark mode
       theme: ThemeData.light().copyWith(
@@ -84,7 +84,8 @@ class _BlocControlState extends State<BlocControl> {
           switch (state.runtimeType) {
             case const (AppLoaddedState):
               state as AppLoaddedState;
-              return HomePage(appBloc: widget.appBloc, data: state.data);
+
+              return HomePage(appBloc: widget.appBloc, data: state.data ?? []);
 
             case const (AppRefreshingState):
               return Scaffold(
